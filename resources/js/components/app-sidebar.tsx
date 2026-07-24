@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Users, ArrowRightLeft, ShoppingCart } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Users, ArrowRightLeft, ShoppingCart, FileText } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -69,6 +69,12 @@ const mainNavItems: NavItem[] = [
         href: '/sales',
         icon: ShoppingCart,
         roles: ['MANAGEMENT', 'STAFF'],
+    },
+    {
+        title: 'Laporan',
+        href: '/reports',
+        icon: FileText,
+        roles: ['MANAGEMENT', 'ADMIN', 'STAFF'],
     }
 ];
 

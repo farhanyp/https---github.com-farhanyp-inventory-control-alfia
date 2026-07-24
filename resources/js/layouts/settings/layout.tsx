@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
@@ -30,6 +30,7 @@ const sidebarNavItems: NavItem[] = [
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
+    const { auth } = usePage<any>().props;
 
     return (
         <div className="px-4 py-6">
@@ -62,6 +63,21 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                 </Link>
                             </Button>
                         ))}
+                        {/* Application settings for ADMIN/MANAGEMENT */}
+                        {auth?.user?.roles?.some((r: any) => ['ADMIN', 'MANAGEMENT'].includes(r.name)) && (
+                            <Button
+                                size="sm"
+                                variant="ghost"
+                                asChild
+                                className={cn('w-full justify-start', {
+                                    'bg-muted': isCurrentOrParentUrl('/settings/application'),
+                                })}
+                            >
+                                <Link href="/settings/application">
+                                    Aplikasi
+                                </Link>
+                            </Button>
+                        )}
                     </nav>
                 </aside>
 

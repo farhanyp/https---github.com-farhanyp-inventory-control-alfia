@@ -35,9 +35,15 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $appSettings = \Illuminate\Support\Facades\Cache::rememberForever('app_settings', function () {
+            $settings = \App\Models\Settings::first();
+            return $settings ? $settings->toArray() : null;
+        });
+
         return [
             ...parent::share($request),
-            'name' => config('app.name'),
+            'name' => ($appSettings['application_name'] ?? null) ?: config('app.name'),
+            'appSettings' => $appSettings,
             'auth' => [
                 'user' => $request->user()?->load('roles'),
             ],

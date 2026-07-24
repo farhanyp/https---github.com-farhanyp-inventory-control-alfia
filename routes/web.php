@@ -21,6 +21,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('batch-stocks', \App\Http\Controllers\BatchStockController::class)->only(['index']);
         Route::resource('sales', \App\Http\Controllers\SalesController::class)->only(['index', 'store', 'show']);
     });
+
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ReportController::class, 'index'])->name('index');
+        Route::get('/stock', [\App\Http\Controllers\ReportController::class, 'stock'])->name('stock');
+        Route::get('/incoming', [\App\Http\Controllers\ReportController::class, 'incoming'])->name('incoming');
+        Route::get('/sales', [\App\Http\Controllers\ReportController::class, 'sales'])->name('sales');
+        Route::get('/expired', [\App\Http\Controllers\ReportController::class, 'expired'])->name('expired');
+    });
 });
 
 require __DIR__.'/settings.php';

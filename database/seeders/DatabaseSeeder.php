@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+
         // Ensure roles are created first
         $roles = [
             \App\Enums\RoleType::ADMIN->value,
@@ -58,5 +60,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
         $management->assignRole(\App\Enums\RoleType::MANAGEMENT->value);
+
+        $this->call([
+            MasterDataSeeder::class,
+            TransactionSeeder::class,
+        ]);
     }
 }

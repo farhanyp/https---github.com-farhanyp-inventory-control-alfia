@@ -7,3 +7,5 @@ export type * from './supplier';
 export type * from './product';
 export type * from './incoming-product';
 export type * from './batch-stock';
+export type * from './report';
+export type * from './settings';
