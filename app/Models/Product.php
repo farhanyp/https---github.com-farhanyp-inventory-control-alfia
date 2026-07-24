@@ -66,4 +66,17 @@ class Product extends Model
     {
         return $this->hasMany(StockHistory::class, 'product_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->product_code)) {
+                $latest = self::latest('id')->first();
+                $nextId = $latest ? $latest->id + 1 : 1;
+                $model->product_code = 'PRD-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+            }
+        });
+    }
 }

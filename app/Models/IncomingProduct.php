@@ -15,6 +15,24 @@ class IncomingProduct extends Model
 
     const UPDATED_AT = null;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->invoice_number)) {
+                $lastRecord = self::orderBy('id', 'desc')->first();
+                $lastNumber = $lastRecord ? intval(substr($lastRecord->invoice_number, 4)) : 0;
+                $model->invoice_number = 'INV-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+            }
+            if (empty($model->batch_no)) {
+                $lastRecord = self::orderBy('id', 'desc')->first();
+                $lastNumber = $lastRecord ? intval(substr($lastRecord->batch_no, 6)) : 0;
+                $model->batch_no = 'BATCH-' . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+            }
+        });
+    }
+
     protected $fillable = [
         'incoming_date',
         'invoice_number',

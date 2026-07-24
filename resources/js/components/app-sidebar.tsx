@@ -27,6 +27,36 @@ const mainNavItems: NavItem[] = [
         href: '/users',
         icon: Users,
         roles: ['MANAGEMENT', 'ADMIN'],
+    },
+    {
+        title: 'Kategori',
+        href: '/categories',
+        icon: BookOpen,
+        roles: ['MANAGEMENT', 'STAFF'],
+    },
+    {
+        title: 'Satuan',
+        href: '/units',
+        icon: BookOpen, // Assuming same icon or we can use another one later
+        roles: ['MANAGEMENT', 'STAFF'],
+    },
+    {
+        title: 'Supplier',
+        href: '/suppliers',
+        icon: BookOpen,
+        roles: ['MANAGEMENT', 'STAFF'],
+    },
+    {
+        title: 'Produk',
+        href: '/products',
+        icon: BookOpen,
+        roles: ['MANAGEMENT', 'STAFF'],
+    },
+    {
+        title: 'Barang Masuk',
+        href: '/incoming-products',
+        icon: BookOpen,
+        roles: ['MANAGEMENT', 'STAFF'],
     }
 ];
 
