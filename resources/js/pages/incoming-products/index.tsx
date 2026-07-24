@@ -58,6 +58,7 @@ export default function IncomingProductsIndex({ incomingProducts, suppliers, pro
                                 <thead className="[&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground whitespace-nowrap">Tgl Masuk</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground whitespace-nowrap">Tgl Kedaluwarsa</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground whitespace-nowrap">Invoice</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground whitespace-nowrap">Produk</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground whitespace-nowrap">Supplier</th>
@@ -72,6 +73,9 @@ export default function IncomingProductsIndex({ incomingProducts, suppliers, pro
                                         <tr key={item.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                             <td className="p-4 align-middle whitespace-nowrap">
                                                 {new Date(item.incoming_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                            </td>
+                                            <td className="p-4 align-middle whitespace-nowrap">
+                                                {item.expired_date ? new Date(item.expired_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'}
                                             </td>
                                             <td className="p-4 align-middle whitespace-nowrap font-medium">{item.invoice_number}</td>
                                             <td className="p-4 align-middle whitespace-nowrap">{item.product?.product_name || '-'}</td>
@@ -99,7 +103,7 @@ export default function IncomingProductsIndex({ incomingProducts, suppliers, pro
                                     ))}
                                     {incomingProducts.data.length === 0 && (
                                         <tr>
-                                            <td colSpan={8} className="h-24 text-center text-muted-foreground">
+                                            <td colSpan={9} className="h-24 text-center text-muted-foreground">
                                                 Belum ada data barang masuk.
                                             </td>
                                         </tr>

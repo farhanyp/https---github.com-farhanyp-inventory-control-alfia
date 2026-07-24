@@ -25,6 +25,34 @@ class BatchStock extends Model
         'incoming_source_id',
     ];
 
+    protected $appends = ['expired_status'];
+
+    public function getExpiredStatusAttribute()
+    {
+        if (empty($this->expired_date)) {
+            return 'Aman';
+        }
+
+        $today = \Carbon\Carbon::today();
+        $expired = \Carbon\Carbon::parse($this->expired_date)->startOfDay();
+
+        if ($expired->isPast() || $today->diffInDays($expired, false) <= 7) {
+            return 'Expired';
+        }
+
+        $diff = $today->diffInDays($expired, false);
+
+        if ($diff <= 14) {
+            return 'Hampir Expired';
+        }
+
+        if ($diff <= 30) {
+            return 'Peringatan';
+        }
+
+        return 'Aman';
+    }
+
     protected function casts(): array
     {
         return [

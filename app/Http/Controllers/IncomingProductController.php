@@ -65,7 +65,18 @@ class IncomingProductController extends Controller
         $validated['created_by'] = Auth::id();
         $validated['created_at'] = now();
 
-        IncomingProduct::create($validated);
+        $incomingProduct = IncomingProduct::create($validated);
+
+        // Automatically create Batch Stock
+        \App\Models\BatchStock::create([
+            'product_id' => $incomingProduct->product_id,
+            'batch_no' => $incomingProduct->batch_no,
+            'expired_date' => $incomingProduct->expired_date,
+            'initial_quantity' => $incomingProduct->quantity,
+            'remaining_quantity' => $incomingProduct->quantity,
+            'purchase_price' => $incomingProduct->purchase_price,
+            'incoming_source_id' => $incomingProduct->id,
+        ]);
 
         return redirect()->back()->with('success', 'Barang Masuk berhasil ditambahkan.');
     }
@@ -111,12 +122,30 @@ class IncomingProductController extends Controller
 
         $incomingProduct->update($validated);
 
+        // Update corresponding Batch Stock
+        $batchStock = \App\Models\BatchStock::where('incoming_source_id', $incomingProduct->id)->first();
+        if ($batchStock) {
+            // Adjust remaining quantity based on the difference (if quantity changed)
+            // But since this is a simple system, let's just reset initial and remaining.
+            // (In a real system, you'd calculate difference and apply to remaining).
+            // For now, we will just sync initial quantity and adjust remaining if not used.
+            $diff = $incomingProduct->quantity - $batchStock->initial_quantity;
+            $batchStock->update([
+                'product_id' => $incomingProduct->product_id,
+                'expired_date' => $incomingProduct->expired_date,
+                'initial_quantity' => $incomingProduct->quantity,
+                'remaining_quantity' => $batchStock->remaining_quantity + $diff,
+                'purchase_price' => $incomingProduct->purchase_price,
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Barang Masuk berhasil diperbarui.');
     }
 
     public function destroy(IncomingProduct $incomingProduct)
     {
         $incomingProduct->delete();
+        // Since database uses cascadeOnDelete for incoming_source_id, BatchStock is automatically deleted.
 
         return redirect()->back()->with('success', 'Barang Masuk berhasil dihapus.');
     }
