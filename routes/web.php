@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('products', \App\Http\Controllers\ProductController::class)->except(['create', 'show', 'edit']);
         Route::resource('incoming-products', \App\Http\Controllers\IncomingProductController::class)->except(['create', 'show', 'edit']);
         Route::resource('batch-stocks', \App\Http\Controllers\BatchStockController::class)->only(['index']);
+        Route::resource('sales', \App\Http\Controllers\SalesController::class)->only(['index', 'store', 'show']);
     });
 });
 

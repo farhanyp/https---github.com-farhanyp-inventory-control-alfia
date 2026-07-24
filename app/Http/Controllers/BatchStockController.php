@@ -13,6 +13,7 @@ class BatchStockController extends Controller
     {
         // Sort by expired date ascending (putting NULLs at the end) and then by remaining quantity ascending
         $batchStocks = BatchStock::with(['product', 'incomingProduct.supplier'])
+            ->where('remaining_quantity', '>', 0)
             ->orderByRaw('expired_date IS NULL ASC, expired_date ASC, remaining_quantity ASC')
             ->paginate(10);
 
