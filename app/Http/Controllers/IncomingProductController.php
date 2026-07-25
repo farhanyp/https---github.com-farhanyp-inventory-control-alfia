@@ -13,7 +13,24 @@ class IncomingProductController extends Controller
 {
     public function index()
     {
-        $incomingProducts = IncomingProduct::with(['supplier', 'product', 'creator'])->orderBy('id', 'desc')->paginate(10);
+        // 1. Dapatkan 10 produk yang memiliki riwayat transaksi masuk (agar total akurat)
+        $paginatedProducts = Product::whereHas('incomingProducts')->paginate(10);
+
+        // 2. Ambil semua barang masuk dari 10 produk tersebut
+        $incomingProductsData = IncomingProduct::with(['supplier', 'product', 'creator'])
+            ->whereIn('product_id', $paginatedProducts->pluck('id'))
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // 3. Buat paginator manual dengan perhitungan akurat dari Product
+        $incomingProducts = new \Illuminate\Pagination\LengthAwarePaginator(
+            $incomingProductsData,
+            $paginatedProducts->total(),
+            $paginatedProducts->perPage(),
+            $paginatedProducts->currentPage(),
+            ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()]
+        );
+
         $suppliers = Supplier::orderBy('supplier_name')->get();
         $products = Product::orderBy('product_name')->get();
 

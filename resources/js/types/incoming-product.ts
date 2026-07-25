@@ -20,3 +20,16 @@ export interface IncomingProduct {
     product?: Product;
     creator?: User;
 }
+
+export interface PaginatedIncomingProducts {
+    data: IncomingProduct[];
+    current_page: number;
+    last_page: number;
+    links: { url: string | null; label: string; active: boolean }[];
+}
+
+export interface IncomingProductsIndexProps {
+    incomingProducts: PaginatedIncomingProducts;
+    suppliers: Supplier[];
+    products: Product[];
+}

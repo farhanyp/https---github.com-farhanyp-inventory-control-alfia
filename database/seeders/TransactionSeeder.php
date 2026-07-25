@@ -16,14 +16,20 @@ class TransactionSeeder extends Seeder
         $userId = DB::table('users')->first()->id ?? null;
 
         // 1. Incoming Products & Batch Stock
-        for ($i = 1; $i <= 10; $i++) {
+        $expirationConfigs = array_merge(
+            array_fill(0, 10, ['min' => 1, 'max' => 6]), // 10 stock kurang dari 7 hari
+            array_fill(0, 15, ['min' => 8, 'max' => 14]), // 15 stock 8-14 hari
+            array_fill(0, 25, ['min' => 15, 'max' => 30]) // 25 stock 15-30 hari
+        );
+
+        foreach ($expirationConfigs as $index => $config) {
+            $i = $index + 1;
             $productId = $faker->numberBetween(1, 6);
             $qty = $faker->numberBetween(10, 50);
             $price = $faker->numberBetween(15, 50) * 1000;
             
             $incomingDate = Carbon::now()->subDays($faker->numberBetween(1, 60));
-            $expiredDate = clone $incomingDate;
-            $expiredDate->addMonths($faker->numberBetween(1, 12));
+            $expiredDate = Carbon::now()->addDays($faker->numberBetween($config['min'], $config['max']));
             
             $batchNo = 'BATCH-' . $incomingDate->format('Ymd') . '-' . $productId . '-' . $i;
 
@@ -72,7 +78,7 @@ class TransactionSeeder extends Seeder
         }
 
         // 2. Sales & Sales Details
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 30; $i++) {
             $saleDate = Carbon::now()->subDays($faker->numberBetween(0, 10));
             
             $saleId = DB::table('sales')->insertGetId([

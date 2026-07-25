@@ -14,3 +14,14 @@ export interface BatchStock {
     incoming_product?: IncomingProduct;
     expired_status?: 'Aman' | 'Peringatan' | 'Hampir Expired' | 'Expired';
 }
+
+export interface PaginatedBatchStocks {
+    data: BatchStock[];
+    current_page: number;
+    last_page: number;
+    links: { url: string | null; label: string; active: boolean }[];
+}
+
+export interface BatchStocksIndexProps {
+    batchStocks: PaginatedBatchStocks;
+}

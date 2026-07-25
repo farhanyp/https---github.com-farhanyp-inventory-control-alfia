@@ -5,12 +5,14 @@ import type { Product } from '@/types/product';
 import { ShoppingCart, Plus, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CreateDialog } from './create-dialog';
+import { Pagination } from '@/components/pagination';
 
 interface SalesIndexProps {
     sales: {
         data: Sales[];
         current_page: number;
         last_page: number;
+        links: { url: string | null; label: string; active: boolean }[];
     };
     products: (Product & { total_stock: string | number })[];
 }
@@ -88,6 +90,9 @@ export default function SalesIndex({ sales, products }: SalesIndexProps) {
                                 )}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="p-4 border-t border-border/50 bg-muted/10">
+                        <Pagination links={sales.links} />
                     </div>
                 </div>
             </div>

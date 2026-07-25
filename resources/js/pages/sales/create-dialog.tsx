@@ -61,7 +61,7 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
 
     const handleAddItem = () => {
         if (!selectedProductId || !inputQty) return;
-        
+
         const qty = parseFloat(inputQty);
         if (qty <= 0) {
             setErrorMsg('Kuantitas harus lebih dari 0');
@@ -72,9 +72,9 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
         if (!product) return;
 
         const maxStock = parseFloat(product.total_stock as string) || 0;
-        
+
         const existingItemIndex = data.items.findIndex(i => i.product_id === product.id);
-        
+
         let newQty = qty;
         if (existingItemIndex >= 0) {
             newQty = data.items[existingItemIndex].quantity + qty;
@@ -111,7 +111,7 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (data.items.length === 0) {
             setErrorMsg('Keranjang belanja masih kosong!');
             return;
@@ -135,7 +135,7 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6 animate-in fade-in-0 duration-200">
             <div className="relative flex flex-col bg-background text-foreground shadow-2xl rounded-xl w-full max-w-6xl max-h-[95vh] overflow-hidden border animate-in zoom-in-95 duration-200">
-                
+
                 {/* Header Modal */}
                 <div className="flex items-center justify-between p-6 border-b bg-card">
                     <div>
@@ -147,7 +147,7 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
                             Buat transaksi penjualan baru. Sistem menggunakan algoritma FEFO untuk memotong stok.
                         </p>
                     </div>
-                    <button 
+                    <button
                         onClick={() => onOpenChange(false)}
                         className="rounded-full p-2 transition-colors hover:bg-muted focus:outline-none"
                     >
@@ -160,7 +160,7 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
                 <form onSubmit={handleSubmit} className="flex-1 overflow-auto flex flex-col md:flex-row bg-slate-50/50 dark:bg-transparent">
                     {/* Left Panel: Form Info & Cart */}
                     <div className="flex-1 p-6 flex flex-col gap-6 overflow-y-auto">
-                        
+
                         {/* Transaction Info */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
@@ -197,19 +197,23 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
                                     <SelectContent>
                                         {products.map(p => (
                                             <SelectItem key={p.id} value={p.id.toString()}>
-                                                {p.product_name} - Sisa Stok: {formatNumber(p.total_stock)}
+                                                {p.product_name} - Sisa Stok: {parseFloat(p.total_stock.toString()).toLocaleString('id-ID')}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div className="space-y-2 w-full md:w-24">
+                            <div className="space-y-2 w-full md:w-32">
                                 <Label>Qty</Label>
                                 <Input
-                                    type="number"
-                                    min="1"
-                                    value={inputQty}
-                                    onChange={(e) => setInputQty(e.target.value)}
+                                    type="text"
+                                    value={inputQty ? formatNumber(inputQty) : ''}
+                                    onChange={(e) => {
+                                        const rawValue = e.target.value.replace(/\D/g, '');
+                                        setInputQty(rawValue);
+                                    }}
+                                    className="text-right"
+                                    placeholder="1"
                                 />
                             </div>
                             <Button type="button" onClick={handleAddItem} className="gap-2 shrink-0">
@@ -307,8 +311,8 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
                                 />
                             </div>
 
-                            <Button 
-                                type="submit" 
+                            <Button
+                                type="submit"
                                 className="w-full h-12 text-base gap-2 mt-4 font-semibold"
                                 disabled={processing || data.items.length === 0 || (parseFloat(data.paid_amount) || 0) < overallTotal}
                             >
