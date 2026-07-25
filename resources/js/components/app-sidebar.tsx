@@ -92,11 +92,16 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
-    const { auth } = usePage().props as any;
+    const { auth, expiringStockCount } = usePage().props as any;
     const user = auth?.user;
     const userRole = user?.roles?.[0]?.name?.toUpperCase() || 'GUEST';
 
-    const visibleMainNavItems = mainNavItems.filter((item) => {
+    const visibleMainNavItems = mainNavItems.map(item => {
+        if (item.title === 'Stok & Expired') {
+            return { ...item, badge: expiringStockCount };
+        }
+        return item;
+    }).filter((item) => {
         if (!item.roles || item.roles.length === 0) return true;
         return item.roles.includes(userRole);
     });

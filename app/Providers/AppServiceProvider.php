@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\BatchStock;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        Inertia::share('expiringStockCount', function () {
+            try {
+                return BatchStock::where('remaining_quantity', '>', 0)
+                    ->whereNotNull('expired_date')
+                    ->where('expired_date', '<=', now()->addDays(7))
+                    ->count();
+            } catch (\Exception $e) {
+                return 0;
+            }
+        });
     }
 
     /**
