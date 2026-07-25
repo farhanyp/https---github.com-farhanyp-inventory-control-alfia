@@ -88,10 +88,10 @@ export default function BatchStocksIndex({ batchStocks }: BatchStocksIndexProps)
                                                     <TooltipContent className="max-w-[320px] leading-relaxed p-4 shadow-lg border-border/50 bg-card/95 backdrop-blur-md">
                                                         <p className="font-semibold mb-3 border-b pb-2">Indikator Warna:</p>
                                                         <ul className="space-y-2.5">
-                                                            <li className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> <span className="text-emerald-500 font-medium">Aman:</span> &gt; 30 Hari</li>
-                                                            <li className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-amber-500" /> <span className="text-amber-500 font-medium">Peringatan:</span> 15 - 30 Hari</li>
-                                                            <li className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-orange-500" /> <span className="text-orange-500 font-medium">Hampir Expired:</span> 8 - 14 Hari</li>
-                                                            <li className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-rose-500" /> <span className="text-rose-500 font-medium">Expired:</span> &lt; 7 Hari / Terlewat</li>
+                                                            <li className="flex items-center gap-2 text-white"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> <span className="text-emerald-500 font-medium">Aman:</span> &gt; 30 Hari</li>
+                                                            <li className="flex items-center gap-2 text-white"><div className="w-2.5 h-2.5 rounded-full bg-amber-500" /> <span className="text-amber-500 font-medium">Peringatan:</span> 15 - 30 Hari</li>
+                                                            <li className="flex items-center gap-2 text-white"><div className="w-2.5 h-2.5 rounded-full bg-orange-500" /> <span className="text-orange-500 font-medium">Hampir Expired:</span> 8 - 14 Hari</li>
+                                                            <li className="flex items-center gap-2 text-white"><div className="w-2.5 h-2.5 rounded-full bg-rose-500" /> <span className="text-rose-500 font-medium">Expired:</span> &lt; 7 Hari / Terlewat</li>
                                                         </ul>
                                                     </TooltipContent>
                                                 </Tooltip>
@@ -109,7 +109,7 @@ export default function BatchStocksIndex({ batchStocks }: BatchStocksIndexProps)
                             <tbody className="[&_tr:last-child]:border-0">
                                 {(() => {
                                     const [expandedGroups, setExpandedGroups] = useState<Record<number, boolean>>({});
-                                    
+
                                     const toggleGroup = (productId: number) => {
                                         setExpandedGroups(prev => ({ ...prev, [productId]: !prev[productId] }));
                                     };
@@ -140,18 +140,17 @@ export default function BatchStocksIndex({ batchStocks }: BatchStocksIndexProps)
                                         const isMultiple = group.length > 1;
                                         const firstItem = group[0];
                                         const isExpanded = expandedGroups[firstItem.product_id];
-                                        
+
                                         const totalRemaining = group.reduce((sum, item) => sum + parseFloat(item.remaining_quantity.toString()), 0);
                                         const totalInitial = group.reduce((sum, item) => sum + parseFloat(item.initial_quantity.toString()), 0);
                                         const uniqueSuppliers = Array.from(new Set(group.map(item => item.incoming_product?.supplier?.supplier_name || '-')));
                                         const supplierText = uniqueSuppliers.length > 1 ? 'Berbagai Supplier' : uniqueSuppliers[0];
-                                        
+
                                         return (
                                             <Fragment key={`group-${firstItem.product_id}`}>
-                                                <tr 
-                                                    className={`border-b border-border/40 transition-all duration-200 ${
-                                                        isMultiple ? 'cursor-pointer hover:bg-muted/60' : 'hover:bg-muted/40'
-                                                    } ${isExpanded ? 'bg-primary/[0.03] shadow-[inset_4px_0_0_0_hsl(var(--primary))] border-l-transparent' : ''}`}
+                                                <tr
+                                                    className={`border-b border-border/40 transition-all duration-200 ${isMultiple ? 'cursor-pointer hover:bg-muted/60' : 'hover:bg-muted/40'
+                                                        } ${isExpanded ? 'bg-primary/[0.03] shadow-[inset_4px_0_0_0_hsl(var(--primary))] border-l-transparent' : ''}`}
                                                     onClick={isMultiple ? () => toggleGroup(firstItem.product_id) : undefined}
                                                 >
                                                     <td className="p-4 px-6 align-middle whitespace-nowrap">
@@ -196,7 +195,7 @@ export default function BatchStocksIndex({ batchStocks }: BatchStocksIndexProps)
                                                         </span>
                                                     </td>
                                                 </tr>
-                                                
+
                                                 {/* Child Rows for Multiple Batches */}
                                                 {isMultiple && isExpanded && group.map((item, idx) => {
                                                     const isLast = idx === group.length - 1;
