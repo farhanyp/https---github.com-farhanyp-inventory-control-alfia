@@ -33,7 +33,6 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Admin User',
-                'username' => 'admin',
                 'password' => bcrypt('password'),
             ]
         );
@@ -44,7 +43,6 @@ class DatabaseSeeder extends Seeder
             ['email' => 'staff@example.com'],
             [
                 'name' => 'Staff User',
-                'username' => 'staff',
                 'password' => bcrypt('password'),
             ]
         );
@@ -55,7 +53,6 @@ class DatabaseSeeder extends Seeder
             ['email' => 'management@example.com'],
             [
                 'name' => 'Management User',
-                'username' => 'management',
                 'password' => bcrypt('password'),
             ]
         );
