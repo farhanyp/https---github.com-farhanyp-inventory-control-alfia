@@ -1,16 +1,13 @@
+import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
-import type { User } from '@/types';
-
-interface UsersIndexProps {
-    users: {
-        data: User[];
-        current_page: number;
-        last_page: number;
-    };
-    roles: { name: string; value: string }[];
-}
+import { Trash2 } from 'lucide-react';
+import { DeleteDialog } from './delete-dialog';
+import type { UsersIndexProps, User } from '@/types';
 
 export default function UsersIndex({ users, roles }: UsersIndexProps) {
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState<User | null>(null);
+
     const handleRoleChange = (userId: string, newRole: string) => {
         router.put(`/users/${userId}/role`, { role: newRole }, {
             preserveScroll: true,
@@ -35,6 +32,7 @@ export default function UsersIndex({ users, roles }: UsersIndexProps) {
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Email</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Role Saat Ini</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Ubah Role</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody className="[&_tr:last-child]:border-0">
@@ -63,6 +61,19 @@ export default function UsersIndex({ users, roles }: UsersIndexProps) {
                                                         ))}
                                                     </select>
                                                 </td>
+                                                <td className="p-4 align-middle">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setUserToDelete(user);
+                                                            setIsDeleteDialogOpen(true);
+                                                        }}
+                                                        className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-destructive/90 hover:text-destructive-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-3 text-destructive border border-destructive/20 hover:border-destructive/90"
+                                                    >
+                                                        <Trash2 className="size-4 mr-2" />
+                                                        Hapus
+                                                    </button>
+                                                </td>
                                             </tr>
                                         );
                                     })}
@@ -72,6 +83,12 @@ export default function UsersIndex({ users, roles }: UsersIndexProps) {
                     </div>
                 </div>
             </div>
+            
+            <DeleteDialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+                user={userToDelete}
+            />
         </>
     );
 }

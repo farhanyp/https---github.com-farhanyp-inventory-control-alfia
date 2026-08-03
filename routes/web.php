@@ -10,6 +10,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:MANAGEMENT|ADMIN')->group(function () {
         Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
         Route::put('users/{user}/role', [\App\Http\Controllers\UserController::class, 'updateRole'])->name('users.updateRole');
+        Route::delete('users/{user}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
     });
 
     Route::middleware('role:MANAGEMENT|STAFF')->group(function () {

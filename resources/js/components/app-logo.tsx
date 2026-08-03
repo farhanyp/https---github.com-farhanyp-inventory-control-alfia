@@ -7,7 +7,7 @@ export default function AppLogo() {
 
     return (
         <>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground overflow-hidden">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-md overflow-hidden">
                 {appSettings?.logo ? (
                     <img 
                         src={`/storage/${appSettings.logo}`} 
@@ -15,10 +15,10 @@ export default function AppLogo() {
                         className="w-full h-full object-contain" 
                     />
                 ) : (
-                    <AppLogoIcon className="size-5" />
+                    <AppLogoIcon className="size-8 fill-current text-[var(--foreground)] dark:text-white" />
                 )}
             </div>
-            <div className="ml-1 grid flex-1 text-left text-sm">
+            <div className="ml-2 grid flex-1 text-left text-sm">
                 <span className="mb-0.5 truncate leading-tight font-semibold">
                     {name}
                 </span>

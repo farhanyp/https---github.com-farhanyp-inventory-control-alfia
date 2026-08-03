@@ -9,3 +9,4 @@ export type * from './incoming-product';
 export type * from './batch-stock';
 export type * from './report';
 export type * from './settings';
+export type * from './user-management';

@@ -29,6 +29,13 @@ class UserController extends Controller
 
         $user->syncRoles([$validated['role']]);
 
-        return redirect()->back()->with('success', 'User role updated successfully.');
+        return redirect()->back()->with('success', 'Role pengguna berhasil diperbarui.');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return redirect()->back()->with('success', 'Pengguna berhasil dihapus.');
     }
 }

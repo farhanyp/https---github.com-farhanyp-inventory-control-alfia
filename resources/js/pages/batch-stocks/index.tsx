@@ -3,42 +3,39 @@ import { Head } from '@inertiajs/react';
 import type { BatchStock, BatchStocksIndexProps } from '@/types';
 import { AlertCircle, CheckCircle2, AlertTriangle, Clock, Info, ChevronDown, ChevronUp, Layers, Box } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Pagination } from '@/components/pagination';
 import { getRemainingDays, formatNumber } from '@/lib/utils';
 
 export default function BatchStocksIndex({ batchStocks }: BatchStocksIndexProps) {
     const getStatusBadge = (status?: string) => {
+        const renderBadge = (icon: React.ReactNode, text: string, colorClass: string, pulse = false) => (
+            <TooltipProvider delayDuration={100}>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 sm:px-2.5 sm:py-1 text-xs font-semibold ring-1 ring-inset cursor-help ${colorClass} ${pulse ? 'animate-pulse' : ''}`}>
+                            {icon}
+                            <span className="hidden sm:inline">{text}</span>
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>{text}</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+        );
+
         switch (status) {
             case 'Aman':
-                return (
-                    <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-600 ring-1 ring-inset ring-emerald-500/20 dark:text-emerald-400">
-                        <CheckCircle2 className="w-3.5 h-3.5" /> Aman
-                    </span>
-                );
+                return renderBadge(<CheckCircle2 className="w-3.5 h-3.5" />, 'Aman', 'bg-emerald-500/10 text-emerald-600 ring-emerald-500/20 dark:text-emerald-400');
             case 'Peringatan':
-                return (
-                    <span className="inline-flex items-center gap-1.5 rounded-md bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-600 ring-1 ring-inset ring-amber-500/20 dark:text-amber-400">
-                        <Clock className="w-3.5 h-3.5" /> Peringatan
-                    </span>
-                );
+                return renderBadge(<Clock className="w-3.5 h-3.5" />, 'Peringatan', 'bg-amber-500/10 text-amber-600 ring-amber-500/20 dark:text-amber-400');
             case 'Hampir Expired':
-                return (
-                    <span className="inline-flex items-center gap-1.5 rounded-md bg-orange-500/10 px-2.5 py-1 text-xs font-semibold text-orange-600 ring-1 ring-inset ring-orange-500/20 dark:text-orange-400">
-                        <AlertTriangle className="w-3.5 h-3.5" /> Hampir Kedaluwarsa
-                    </span>
-                );
+                return renderBadge(<AlertTriangle className="w-3.5 h-3.5" />, 'Hampir Kedaluwarsa', 'bg-orange-500/10 text-orange-600 ring-orange-500/20 dark:text-orange-400');
             case 'Expired':
-                return (
-                    <span className="inline-flex items-center gap-1.5 rounded-md bg-rose-500/10 px-2.5 py-1 text-xs font-semibold text-rose-600 ring-1 ring-inset ring-rose-500/20 dark:text-rose-400 animate-pulse">
-                        <AlertCircle className="w-3.5 h-3.5" /> Kedaluwarsa
-                    </span>
-                );
+                return renderBadge(<AlertCircle className="w-3.5 h-3.5" />, 'Kedaluwarsa', 'bg-rose-500/10 text-rose-600 ring-rose-500/20 dark:text-rose-400', true);
             default:
-                return (
-                    <span className="inline-flex items-center gap-1.5 rounded-md bg-gray-500/10 px-2.5 py-1 text-xs font-semibold text-gray-600 ring-1 ring-inset ring-gray-500/20">
-                        -
-                    </span>
-                );
+                return renderBadge(<span className="w-3.5 h-3.5 inline-block text-center leading-none">-</span>, '-', 'bg-gray-500/10 text-gray-600 ring-gray-500/20');
         }
     };
 
@@ -57,28 +54,33 @@ export default function BatchStocksIndex({ batchStocks }: BatchStocksIndexProps)
                                 Pantau sisa stok produk per batch dan kelola status kedaluwarsanya dengan mudah.
                             </p>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-md border border-border/50">
-                            <Info className="w-4 h-4" />
-                            <span>Status Warna</span>
-                            <TooltipProvider delayDuration={100}>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <div className="w-4 h-4 rounded-full border border-muted-foreground/30 flex items-center justify-center cursor-help ml-1">
-                                            <span className="text-[10px] font-bold">?</span>
-                                        </div>
-                                    </TooltipTrigger>
-                                    <TooltipContent className="max-w-[300px] sm:max-w-[320px] leading-relaxed p-4 shadow-lg border-border/50 bg-card/95 backdrop-blur-md">
-                                        <p className="font-semibold mb-3 border-b pb-2">Indikator Warna:</p>
-                                        <ul className="space-y-2.5">
-                                            <li className="flex items-center gap-2 text-white"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> <span className="text-emerald-500 font-medium">Aman:</span> &gt; 30 Hari</li>
-                                            <li className="flex items-center gap-2 text-white"><div className="w-2.5 h-2.5 rounded-full bg-amber-500" /> <span className="text-amber-500 font-medium">Peringatan:</span> 15 - 30 Hari</li>
-                                            <li className="flex items-center gap-2 text-white"><div className="w-2.5 h-2.5 rounded-full bg-orange-500" /> <span className="text-orange-500 font-medium">Hampir Kedaluwarsa:</span> 8 - 14 Hari</li>
-                                            <li className="flex items-center gap-2 text-white"><div className="w-2.5 h-2.5 rounded-full bg-rose-500" /> <span className="text-rose-500 font-medium">Kedaluwarsa:</span> &lt; 7 Hari / Terlewat</li>
-                                        </ul>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                        </div>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <button type="button" className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 hover:bg-muted/80 transition-colors px-3 py-1.5 rounded-md border border-border/50 cursor-pointer">
+                                    <Info className="w-4 h-4" />
+                                    <span>Status Warna</span>
+                                    <div className="w-4 h-4 rounded-full border border-muted-foreground/30 flex items-center justify-center ml-1">
+                                        <span className="text-[10px] font-bold">?</span>
+                                    </div>
+                                </button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-[90vw] sm:max-w-[400px]">
+                                <DialogHeader>
+                                    <DialogTitle>Indikator Warna</DialogTitle>
+                                    <DialogDescription>
+                                        Berikut adalah penjelasan status kedaluwarsa berdasarkan sisa hari:
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div className="p-2">
+                                    <ul className="space-y-3">
+                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-emerald-500" /> <span className="text-emerald-500 font-medium">Aman:</span> &gt; 30 Hari</li>
+                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-amber-500" /> <span className="text-amber-500 font-medium">Peringatan:</span> 15 - 30 Hari</li>
+                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-orange-500" /> <span className="text-orange-500 font-medium">Hampir Kedaluwarsa:</span> 8 - 14 Hari</li>
+                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-rose-500" /> <span className="text-rose-500 font-medium">Kedaluwarsa:</span> &lt; 7 Hari / Terlewat</li>
+                                    </ul>
+                                </div>
+                            </DialogContent>
+                        </Dialog>
                     </div>
                     
                     <div className="flex flex-col gap-4 p-4 md:p-6 overflow-y-auto">

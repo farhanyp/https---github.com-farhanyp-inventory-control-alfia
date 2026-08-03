@@ -14,69 +14,90 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import type { NavGroup } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const navGroups: NavGroup[] = [
     {
-        title: 'Dasbor',
-        href: dashboard(),
-        icon: LayoutGrid,
+        title: 'Utama',
+        items: [
+            {
+                title: 'Dasbor',
+                href: dashboard(),
+                icon: LayoutGrid,
+            }
+        ]
     },
     {
-        title: 'Manajemen Pengguna',
-        href: '/users',
-        icon: Users,
-        roles: ['MANAGEMENT', 'ADMIN'],
+        title: 'Master Data',
+        items: [
+            {
+                title: 'Kategori',
+                href: '/categories',
+                icon: Tags,
+                roles: ['MANAGEMENT', 'ADMIN'],
+            },
+            {
+                title: 'Satuan',
+                href: '/units',
+                icon: Scale,
+                roles: ['MANAGEMENT', 'ADMIN'],
+            },
+            {
+                title: 'Supplier',
+                href: '/suppliers',
+                icon: Truck,
+                roles: ['MANAGEMENT', 'ADMIN'],
+            },
+            {
+                title: 'Produk',
+                href: '/products',
+                icon: Package,
+                roles: ['MANAGEMENT', 'ADMIN'],
+            },
+        ]
     },
     {
-        title: 'Kategori',
-        href: '/categories',
-        icon: Tags,
-        roles: ['MANAGEMENT', 'STAFF'],
+        title: 'Transaksi & Stok',
+        items: [
+            {
+                title: 'Barang Masuk',
+                href: '/incoming-products',
+                icon: ArrowRightLeft,
+                roles: ['MANAGEMENT', 'ADMIN'],
+            },
+            {
+                title: 'Stok & Kedaluwarsa',
+                href: '/batch-stocks',
+                icon: Archive,
+                roles: ['MANAGEMENT', 'ADMIN'],
+            },
+            {
+                title: 'Kasir / Penjualan',
+                href: '/sales',
+                icon: ShoppingCart,
+                roles: ['MANAGEMENT', 'STAFF'],
+            },
+        ]
     },
     {
-        title: 'Satuan',
-        href: '/units',
-        icon: Scale, 
-        roles: ['MANAGEMENT', 'STAFF'],
-    },
-    {
-        title: 'Supplier',
-        href: '/suppliers',
-        icon: Truck,
-        roles: ['MANAGEMENT', 'STAFF'],
-    },
-    {
-        title: 'Produk',
-        href: '/products',
-        icon: Package,
-        roles: ['MANAGEMENT', 'STAFF'],
-    },
-    {
-        title: 'Barang Masuk',
-        href: '/incoming-products',
-        icon: ArrowRightLeft,
-        roles: ['MANAGEMENT', 'STAFF'],
-    },
-    {
-        title: 'Stok & Kedaluwarsa',
-        href: '/batch-stocks',
-        icon: Archive,
-        roles: ['MANAGEMENT', 'STAFF'],
-    },
-    {
-        title: 'Kasir / Penjualan',
-        href: '/sales',
-        icon: ShoppingCart,
-        roles: ['MANAGEMENT', 'STAFF'],
-    },
-    {
-        title: 'Laporan',
-        href: '/reports',
-        icon: FileText,
-        roles: ['MANAGEMENT', 'ADMIN', 'STAFF'],
+        title: 'Manajemen & Laporan',
+        items: [
+            {
+                title: 'Manajemen Pengguna',
+                href: '/users',
+                icon: Users,
+                roles: ['MANAGEMENT'],
+            },
+            {
+                title: 'Laporan',
+                href: '/reports',
+                icon: FileText,
+                roles: ['MANAGEMENT', 'ADMIN', 'STAFF'],
+            }
+        ]
     }
 ];
+
 
 // const footerNavItems: NavItem[] = [
 //     {
@@ -96,15 +117,19 @@ export function AppSidebar() {
     const user = auth?.user;
     const userRole = user?.roles?.[0]?.name?.toUpperCase() || 'GUEST';
 
-    const visibleMainNavItems = mainNavItems.map(item => {
-        if (item.title === 'Stok & Kedaluwarsa') {
-            return { ...item, badge: expiringStockCount };
-        }
-        return item;
-    }).filter((item) => {
-        if (!item.roles || item.roles.length === 0) return true;
-        return item.roles.includes(userRole);
-    });
+    const visibleNavGroups = navGroups.map(group => {
+        const filteredItems = group.items.map(item => {
+            if (item.title === 'Stok & Kedaluwarsa') {
+                return { ...item, badge: expiringStockCount };
+            }
+            return item;
+        }).filter((item) => {
+            if (!item.roles || item.roles.length === 0) return true;
+            return item.roles.includes(userRole);
+        });
+
+        return { ...group, items: filteredItems };
+    }).filter(group => group.items.length > 0);
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -121,7 +146,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={visibleMainNavItems} />
+                <NavMain groups={visibleNavGroups} />
             </SidebarContent>
 
             <SidebarFooter>

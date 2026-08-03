@@ -14,3 +14,8 @@ export type NavItem = {
     roles?: string[];
     badge?: string | number | null;
 };
+
+export type NavGroup = {
+    title: string;
+    items: NavItem[];
+};
