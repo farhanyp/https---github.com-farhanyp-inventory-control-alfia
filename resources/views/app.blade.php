@@ -32,11 +32,10 @@
 
         @php
             $appSettings = \Illuminate\Support\Facades\Cache::get('app_settings');
-            $faviconUrl = isset($appSettings['logo']) && $appSettings['logo'] ? asset('storage/' . $appSettings['logo']) : '/favicon.ico';
             $appName = isset($appSettings['application_name']) && $appSettings['application_name'] ? $appSettings['application_name'] : config('app.name', 'Laravel');
         @endphp
         
-        <link rel="icon" href="{{ $faviconUrl }}" sizes="any">
+        <link rel="icon" href="/favicon.svg" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 

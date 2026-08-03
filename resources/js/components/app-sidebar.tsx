@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Users, ArrowRightLeft, ShoppingCart, FileText } from 'lucide-react';
+import { Archive, ArrowRightLeft, FileText, FolderGit2, LayoutGrid, Package, Scale, ShoppingCart, Tags, Truck, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -18,7 +18,7 @@ import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Dasbor',
         href: dashboard(),
         icon: LayoutGrid,
     },
@@ -31,25 +31,25 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Kategori',
         href: '/categories',
-        icon: BookOpen,
+        icon: Tags,
         roles: ['MANAGEMENT', 'STAFF'],
     },
     {
         title: 'Satuan',
         href: '/units',
-        icon: BookOpen, // Assuming same icon or we can use another one later
+        icon: Scale, 
         roles: ['MANAGEMENT', 'STAFF'],
     },
     {
         title: 'Supplier',
         href: '/suppliers',
-        icon: BookOpen,
+        icon: Truck,
         roles: ['MANAGEMENT', 'STAFF'],
     },
     {
         title: 'Produk',
         href: '/products',
-        icon: BookOpen,
+        icon: Package,
         roles: ['MANAGEMENT', 'STAFF'],
     },
     {
@@ -59,9 +59,9 @@ const mainNavItems: NavItem[] = [
         roles: ['MANAGEMENT', 'STAFF'],
     },
     {
-        title: 'Stok & Expired',
+        title: 'Stok & Kedaluwarsa',
         href: '/batch-stocks',
-        icon: BookOpen,
+        icon: Archive,
         roles: ['MANAGEMENT', 'STAFF'],
     },
     {
@@ -78,18 +78,18 @@ const mainNavItems: NavItem[] = [
     }
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
+// const footerNavItems: NavItem[] = [
+//     {
+//         title: 'Repository',
+//         href: 'https://github.com/laravel/react-starter-kit',
+//         icon: FolderGit2,
+//     },
+//     {
+//         title: 'Documentation',
+//         href: 'https://laravel.com/docs/starter-kits#react',
+//         icon: BookOpen,
+//     },
+// ];
 
 export function AppSidebar() {
     const { auth, expiringStockCount } = usePage().props as any;
@@ -97,7 +97,7 @@ export function AppSidebar() {
     const userRole = user?.roles?.[0]?.name?.toUpperCase() || 'GUEST';
 
     const visibleMainNavItems = mainNavItems.map(item => {
-        if (item.title === 'Stok & Expired') {
+        if (item.title === 'Stok & Kedaluwarsa') {
             return { ...item, badge: expiringStockCount };
         }
         return item;
@@ -125,7 +125,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

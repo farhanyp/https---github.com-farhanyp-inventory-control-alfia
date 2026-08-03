@@ -1,67 +1,37 @@
 import { Head } from '@inertiajs/react';
 import { dashboard } from '@/routes';
 import { Package, AlertTriangle, Clock, TrendingUp } from 'lucide-react';
-import type { Product, BatchStock, IncomingProduct } from '@/types';
-
-interface DashboardProps {
-    metrics: {
-        totalProducts: number;
-        lowStockCount: number;
-        expiringCount: number;
-    };
-    lowStockTop: Product[];
-    expiringTop: BatchStock[];
-    recentIncoming: IncomingProduct[];
-}
+import { formatNumber, getRemainingDays } from '@/lib/utils';
+import type { DashboardProps } from '@/types/dashboard';
 
 export default function Dashboard({ metrics, lowStockTop, expiringTop, recentIncoming }: DashboardProps) {
-    const formatNumber = (val: string | number) => {
-        return parseFloat(String(val)).toLocaleString('id-ID');
-    };
-
-    const getRemainingDays = (expiredDateStr: string | null) => {
-        if (!expiredDateStr) return '-';
-        
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const expired = new Date(expiredDateStr);
-        expired.setHours(0, 0, 0, 0);
-        
-        const diffTime = expired.getTime() - today.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        if (diffDays < 0) return 'Sudah Expired';
-        if (diffDays === 0) return 'Hari ini';
-        return `${diffDays} hari lagi`;
-    };
-
     return (
         <>
-            <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-6 bg-slate-50/50 dark:bg-transparent">
-                <div className="grid auto-rows-min gap-6 md:grid-cols-3">
+            <Head title="Dasbor" />
+            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 md:p-6 bg-slate-50/50 dark:bg-transparent">
+                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     {/* Card 1: Total Produk */}
-                    <div className="relative overflow-hidden rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md">
+                    <div className="relative overflow-hidden rounded-xl border border-border bg-card p-4 md:p-6 shadow-sm transition-all hover:shadow-md">
                         <div className="flex items-center gap-4">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
                                 <Package className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-muted-foreground">Total Produk Aktif</p>
-                                <h3 className="text-2xl font-bold tracking-tight">{formatNumber(metrics.totalProducts)}</h3>
+                                <h3 className="text-xl md:text-2xl font-bold tracking-tight">{formatNumber(metrics.totalProducts)}</h3>
                             </div>
                         </div>
                     </div>
 
                     {/* Card 2: Low Stock */}
-                    <div className="relative overflow-hidden rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md">
+                    <div className="relative overflow-hidden rounded-xl border border-border bg-card p-4 md:p-6 shadow-sm transition-all hover:shadow-md">
                         <div className="flex items-center gap-4">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
                                 <AlertTriangle className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-muted-foreground">Stok Menipis</p>
-                                <h3 className="text-2xl font-bold tracking-tight text-orange-600 dark:text-orange-400">
+                                <h3 className="text-xl md:text-2xl font-bold tracking-tight text-orange-600 dark:text-orange-400">
                                     {formatNumber(metrics.lowStockCount)} <span className="text-sm font-normal text-muted-foreground">produk</span>
                                 </h3>
                             </div>
@@ -69,14 +39,14 @@ export default function Dashboard({ metrics, lowStockTop, expiringTop, recentInc
                     </div>
 
                     {/* Card 3: Expiring Soon */}
-                    <div className="relative overflow-hidden rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md">
+                    <div className="relative overflow-hidden rounded-xl border border-border bg-card p-4 md:p-6 shadow-sm transition-all hover:shadow-md">
                         <div className="flex items-center gap-4">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
                                 <Clock className="h-6 w-6 text-red-600 dark:text-red-400" />
                             </div>
                             <div>
                                 <p className="text-sm font-medium text-muted-foreground">Mendekati Kedaluwarsa</p>
-                                <h3 className="text-2xl font-bold tracking-tight text-red-600 dark:text-red-400">
+                                <h3 className="text-xl md:text-2xl font-bold tracking-tight text-red-600 dark:text-red-400">
                                     {formatNumber(metrics.expiringCount)} <span className="text-sm font-normal text-muted-foreground">batch</span>
                                 </h3>
                             </div>
@@ -85,7 +55,7 @@ export default function Dashboard({ metrics, lowStockTop, expiringTop, recentInc
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">
-                    {/* Low Stock Table */}
+                    {/* Low Stock List as Cards */}
                     <div className="rounded-xl border border-border bg-card shadow-sm flex flex-col">
                         <div className="border-b border-border p-4">
                             <h3 className="font-semibold text-lg flex items-center gap-2">
@@ -93,34 +63,25 @@ export default function Dashboard({ metrics, lowStockTop, expiringTop, recentInc
                                 Top 5 Produk Stok Menipis
                             </h3>
                         </div>
-                        <div className="p-0 overflow-auto flex-1">
-                            <table className="w-full text-sm">
-                                <thead className="bg-muted/50">
-                                    <tr>
-                                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Produk</th>
-                                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Sisa Stok</th>
-                                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Batas Min.</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {lowStockTop.map(product => (
-                                        <tr key={product.id} className="border-b last:border-0 hover:bg-muted/20">
-                                            <td className="px-4 py-3 font-medium">{product.product_name}</td>
-                                            <td className="px-4 py-3 text-right font-bold text-orange-600">{formatNumber((product as any).total_stock || 0)}</td>
-                                            <td className="px-4 py-3 text-right text-muted-foreground">{formatNumber(product.min_stock)}</td>
-                                        </tr>
-                                    ))}
-                                    {lowStockTop.length === 0 && (
-                                        <tr>
-                                            <td colSpan={3} className="px-4 py-8 text-center text-muted-foreground">Stok semua produk dalam keadaan aman.</td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
+                        <div className="p-4 flex-1 flex flex-col gap-3">
+                            {lowStockTop.map(product => (
+                                <div key={product.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg border border-border/50 bg-muted/10 hover:bg-muted/20 transition-colors">
+                                    <div className="mb-2 sm:mb-0">
+                                        <p className="font-medium text-sm md:text-base">{product.product_name}</p>
+                                        <p className="text-xs text-muted-foreground">Batas Min: {formatNumber(product.min_stock)}</p>
+                                    </div>
+                                    <div className="text-left sm:text-right">
+                                        <p className="text-sm font-bold text-orange-600">Sisa {formatNumber((product as any).total_stock || 0)}</p>
+                                    </div>
+                                </div>
+                            ))}
+                            {lowStockTop.length === 0 && (
+                                <div className="p-8 text-center text-muted-foreground">Stok semua produk dalam keadaan aman.</div>
+                            )}
                         </div>
                     </div>
 
-                    {/* Expiring Batches Table */}
+                    {/* Expiring Batches List as Cards */}
                     <div className="rounded-xl border border-border bg-card shadow-sm flex flex-col">
                         <div className="border-b border-border p-4">
                             <h3 className="font-semibold text-lg flex items-center gap-2">
@@ -128,37 +89,26 @@ export default function Dashboard({ metrics, lowStockTop, expiringTop, recentInc
                                 Top 5 Batch Mendekati Kedaluwarsa
                             </h3>
                         </div>
-                        <div className="p-0 overflow-auto flex-1">
-                            <table className="w-full text-sm">
-                                <thead className="bg-muted/50">
-                                    <tr>
-                                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Produk</th>
-                                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Batch</th>
-                                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Sisa Waktu</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {expiringTop.map(batch => (
-                                        <tr key={batch.id} className="border-b last:border-0 hover:bg-muted/20">
-                                            <td className="px-4 py-3 font-medium">{batch.product?.product_name}</td>
-                                            <td className="px-4 py-3 text-muted-foreground">{batch.batch_no}</td>
-                                            <td className="px-4 py-3 text-right font-bold text-red-600">
-                                                {getRemainingDays(batch.expired_date)}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    {expiringTop.length === 0 && (
-                                        <tr>
-                                            <td colSpan={3} className="px-4 py-8 text-center text-muted-foreground">Tidak ada batch yang mendekati kedaluwarsa.</td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
+                        <div className="p-4 flex-1 flex flex-col gap-3">
+                            {expiringTop.map(batch => (
+                                <div key={batch.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg border border-border/50 bg-muted/10 hover:bg-muted/20 transition-colors">
+                                    <div className="mb-2 sm:mb-0">
+                                        <p className="font-medium text-sm md:text-base">{batch.product?.product_name}</p>
+                                        <p className="text-xs text-muted-foreground">Batch: {batch.batch_no}</p>
+                                    </div>
+                                    <div className="text-left sm:text-right">
+                                        <p className="text-sm font-bold text-red-600">{getRemainingDays(batch.expired_date)}</p>
+                                    </div>
+                                </div>
+                            ))}
+                            {expiringTop.length === 0 && (
+                                <div className="p-8 text-center text-muted-foreground">Tidak ada batch yang mendekati kedaluwarsa.</div>
+                            )}
                         </div>
                     </div>
                 </div>
 
-                {/* Recent Incoming Table */}
+                {/* Recent Incoming List as Cards */}
                 <div className="rounded-xl border border-border bg-card shadow-sm">
                     <div className="border-b border-border p-4">
                         <h3 className="font-semibold text-lg flex items-center gap-2">
@@ -166,38 +116,28 @@ export default function Dashboard({ metrics, lowStockTop, expiringTop, recentInc
                             Barang Masuk Terbaru
                         </h3>
                     </div>
-                    <div className="p-0 overflow-auto flex-1">
-                        <table className="w-full text-sm">
-                            <thead className="bg-muted/50">
-                                <tr>
-                                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Tanggal</th>
-                                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Invoice</th>
-                                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Produk</th>
-                                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Supplier</th>
-                                    <th className="px-4 py-3 text-right font-medium text-muted-foreground">Kuantitas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {recentIncoming.map(incoming => (
-                                    <tr key={incoming.id} className="border-b last:border-0 hover:bg-muted/20">
-                                        <td className="px-4 py-3">
-                                            {new Date(incoming.created_at || incoming.incoming_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                        </td>
-                                        <td className="px-4 py-3 font-medium">{incoming.invoice_number}</td>
-                                        <td className="px-4 py-3">{incoming.product?.product_name}</td>
-                                        <td className="px-4 py-3 text-muted-foreground">{incoming.supplier?.supplier_name}</td>
-                                        <td className="px-4 py-3 text-right font-bold text-green-600">
-                                            +{formatNumber(incoming.quantity)}
-                                        </td>
-                                    </tr>
-                                ))}
-                                {recentIncoming.length === 0 && (
-                                    <tr>
-                                        <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">Belum ada riwayat transaksi barang masuk.</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
+                    <div className="p-4 flex flex-col gap-3">
+                        {recentIncoming.map(incoming => (
+                            <div key={incoming.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 rounded-lg border border-border/50 bg-muted/10 hover:bg-muted/20 transition-colors">
+                                <div className="mb-2 sm:mb-0">
+                                    <p className="font-medium text-sm md:text-base">{incoming.product?.product_name}</p>
+                                    <div className="flex gap-2 text-xs text-muted-foreground mt-1">
+                                        <span>{incoming.invoice_number}</span>
+                                        <span>•</span>
+                                        <span>{incoming.supplier?.supplier_name}</span>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col items-start sm:items-end w-full sm:w-auto mt-1 sm:mt-0">
+                                    <p className="text-sm font-bold text-green-600">+{formatNumber(incoming.quantity)}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {new Date(incoming.created_at || incoming.incoming_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                        {recentIncoming.length === 0 && (
+                            <div className="p-8 text-center text-muted-foreground">Belum ada riwayat transaksi barang masuk.</div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -208,7 +148,7 @@ export default function Dashboard({ metrics, lowStockTop, expiringTop, recentInc
 Dashboard.layout = {
     breadcrumbs: [
         {
-            title: 'Dashboard',
+            title: 'Dasbor',
             href: dashboard(),
         },
     ],
