@@ -1,6 +1,5 @@
 import React from 'react';
 import { useForm } from '@inertiajs/react';
-import type { Category } from '@/types';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -10,15 +9,9 @@ import {
     DialogFooter,
     DialogDescription,
 } from '@/components/ui/dialog';
+import type { CategoryActionDialogProps } from '@/types/category';
 
-interface DeleteDialogProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    category: Category | null;
-    onSuccess?: () => void;
-}
-
-export function DeleteDialog({ open, onOpenChange, category, onSuccess }: DeleteDialogProps) {
+export function DeleteDialog({ open, onOpenChange, category, onSuccess }: CategoryActionDialogProps) {
     const { delete: destroy, processing } = useForm();
 
     const handleDelete = () => {

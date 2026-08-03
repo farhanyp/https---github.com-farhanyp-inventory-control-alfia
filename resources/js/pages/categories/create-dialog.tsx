@@ -11,14 +11,9 @@ import {
     DialogFooter,
     DialogDescription,
 } from '@/components/ui/dialog';
+import type { CategoryDialogProps } from '@/types/category';
 
-interface CreateDialogProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    onSuccess?: () => void;
-}
-
-export function CreateDialog({ open, onOpenChange, onSuccess }: CreateDialogProps) {
+export function CreateDialog({ open, onOpenChange, onSuccess }: CategoryDialogProps) {
     const { data, setData, post, processing, errors, reset } = useForm({
         category_name: '',
     });

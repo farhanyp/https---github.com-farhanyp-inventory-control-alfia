@@ -10,3 +10,13 @@ export interface CategoriesIndexProps {
         last_page: number;
     };
 }
+
+export interface CategoryDialogProps {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onSuccess?: () => void;
+}
+
+export interface CategoryActionDialogProps extends CategoryDialogProps {
+    category: Category | null;
+}

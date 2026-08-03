@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
-import type { Category } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,15 +11,9 @@ import {
     DialogFooter,
     DialogDescription,
 } from '@/components/ui/dialog';
+import type { CategoryActionDialogProps } from '@/types/category';
 
-interface EditDialogProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    category: Category | null;
-    onSuccess?: () => void;
-}
-
-export function EditDialog({ open, onOpenChange, category, onSuccess }: EditDialogProps) {
+export function EditDialog({ open, onOpenChange, category, onSuccess }: CategoryActionDialogProps) {
     const { data, setData, put, processing, errors, reset, clearErrors } = useForm({
         category_name: '',
     });

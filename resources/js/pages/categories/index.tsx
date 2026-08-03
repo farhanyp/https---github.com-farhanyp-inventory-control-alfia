@@ -47,7 +47,43 @@ export default function CategoriesIndex({ categories }: CategoriesIndexProps) {
                     </div>
                     
                     <div className="p-4 md:p-6 bg-muted/5">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {/* Tampilan Desktop (Tabel) */}
+                        <div className="hidden md:block relative w-full overflow-auto rounded-md border border-border/50">
+                            <table className="w-full caption-bottom text-sm">
+                                <thead className="[&_tr]:border-b bg-muted/30">
+                                    <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-24">ID</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Nama Kategori</th>
+                                        <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-48">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="[&_tr:last-child]:border-0 bg-card">
+                                    {categories.data.map((category) => (
+                                        <tr key={category.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                            <td className="p-4 align-middle">
+                                                <span className="inline-flex items-center rounded-md bg-muted/60 px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border/40">
+                                                    {category.id}
+                                                </span>
+                                            </td>
+                                            <td className="p-4 align-middle font-medium">{category.category_name}</td>
+                                            <td className="p-4 align-middle text-right">
+                                                <div className="flex justify-end gap-2">
+                                                    <Button variant="outline" size="sm" onClick={() => handleOpenEdit(category)} className="h-8 px-3 text-xs bg-card hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-colors">
+                                                        <Pencil className="w-3.5 h-3.5 mr-1.5" /> Edit
+                                                    </Button>
+                                                    <Button variant="destructive" size="sm" onClick={() => handleOpenDelete(category)} className="h-8 px-3 text-xs opacity-90 hover:opacity-100">
+                                                        <Trash2 className="w-3.5 h-3.5 mr-1.5" /> Hapus
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Tampilan Mobile (Card) */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:hidden gap-4">
                             {categories.data.map((category) => (
                                 <div key={category.id} className="group relative flex flex-col justify-between p-5 rounded-xl border border-border/60 bg-card shadow-sm hover:shadow-md transition-all hover:border-primary/30 gap-4">
                                     <div className="flex items-start justify-between">
