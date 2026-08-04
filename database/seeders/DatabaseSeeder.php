@@ -59,8 +59,8 @@ class DatabaseSeeder extends Seeder
         $management->assignRole(\App\Enums\RoleType::MANAGEMENT->value);
 
         $this->call([
-            // MasterDataSeeder::class,
-            // TransactionSeeder::class,
+            MasterDataSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }

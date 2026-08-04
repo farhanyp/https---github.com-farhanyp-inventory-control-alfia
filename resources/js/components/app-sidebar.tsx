@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Archive, ArrowRightLeft, FileText, FolderGit2, LayoutGrid, Package, Scale, ShoppingCart, Tags, Truck, Users } from 'lucide-react';
+import { Archive, ArrowRightLeft, FileText, FolderGit2, LayoutGrid, Package, Scale, ShoppingCart, Tags, Truck, Users, X } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -12,6 +12,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import type { NavGroup } from '@/types';
@@ -116,6 +117,7 @@ export function AppSidebar() {
     const { auth, expiringStockCount } = usePage().props as any;
     const user = auth?.user;
     const userRole = user?.roles?.[0]?.name?.toUpperCase() || 'GUEST';
+    const { setOpenMobile, isMobile } = useSidebar();
 
     const visibleNavGroups = navGroups.map(group => {
         const filteredItems = group.items.map(item => {
@@ -134,15 +136,27 @@ export function AppSidebar() {
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
-                                <AppLogo />
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
+                <div className="flex items-center justify-between w-full">
+                    <SidebarMenu className="flex-1 w-auto">
+                        <SidebarMenuItem>
+                            <SidebarMenuButton size="lg" asChild>
+                                <Link href={dashboard()} prefetch>
+                                    <AppLogo />
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                    {isMobile && (
+                        <button
+                            type="button"
+                            onClick={() => setOpenMobile(false)}
+                            className="p-1.5 ml-2 rounded-md text-sidebar-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent transition-colors shrink-0"
+                            aria-label="Tutup sidebar"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    )}
+                </div>
             </SidebarHeader>
 
             <SidebarContent>
