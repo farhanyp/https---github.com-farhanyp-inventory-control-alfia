@@ -55,15 +55,15 @@ export default function UnitsIndex({ units }: UnitsIndexProps) {
                             <table className="w-full caption-bottom text-sm">
                                 <thead className="[&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                                        <th className="h-12 w-16 px-4 text-center align-middle font-medium text-muted-foreground">ID</th>
+                                        <th className="h-12 w-16 px-4 text-center align-middle font-medium text-muted-foreground">No</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Nama Satuan</th>
                                         <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody className="[&_tr:last-child]:border-0">
-                                    {units.data.map((unit) => (
+                                    {units.data.map((unit, index) => (
                                         <tr key={unit.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                                            <td className="p-4 text-center align-middle">{unit.id}</td>
+                                            <td className="p-4 text-center align-middle">{(units.current_page - 1) * 10 + index + 1}</td>
                                             <td className="p-4 align-middle">{unit.unit_name}</td>
                                             <td className="p-4 align-middle text-right">
                                                 <div className="flex justify-end gap-2">

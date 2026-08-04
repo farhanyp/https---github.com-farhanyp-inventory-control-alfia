@@ -61,8 +61,14 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $product->delete();
-
-        return redirect()->back()->with('success', 'Product deleted successfully.');
+        try {
+            $product->delete();
+            return redirect()->back()->with('success', 'Produk berhasil dihapus.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '23000') {
+                return back()->withErrors(['message' => 'Produk ini tidak dapat dihapus karena masih terhubung dengan data lain (misalnya transaksi).']);
+            }
+            return back()->withErrors(['message' => 'Terjadi kesalahan saat menghapus data.']);
+        }
     }
 }

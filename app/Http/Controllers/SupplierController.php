@@ -45,8 +45,14 @@ class SupplierController extends Controller
 
     public function destroy(Supplier $supplier)
     {
-        $supplier->delete();
-
-        return redirect()->back()->with('success', 'Supplier deleted successfully.');
+        try {
+            $supplier->delete();
+            return redirect()->back()->with('success', 'Supplier berhasil dihapus.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '23000') {
+                return back()->withErrors(['message' => 'Supplier ini tidak dapat dihapus karena masih terhubung dengan data lain.']);
+            }
+            return back()->withErrors(['message' => 'Terjadi kesalahan saat menghapus data.']);
+        }
     }
 }

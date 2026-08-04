@@ -57,6 +57,7 @@ export default function ProductsIndex({ products, categories, units }: ProductsI
                             <table className="w-full caption-bottom text-sm">
                                 <thead className="[&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <th className="h-12 w-16 px-4 text-center align-middle font-medium text-muted-foreground whitespace-nowrap">No</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground whitespace-nowrap">Kode</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground whitespace-nowrap">Nama Produk</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground whitespace-nowrap">Kategori</th>
@@ -69,8 +70,9 @@ export default function ProductsIndex({ products, categories, units }: ProductsI
                                     </tr>
                                 </thead>
                                 <tbody className="[&_tr:last-child]:border-0">
-                                    {products.data.map((product) => (
+                                    {products.data.map((product, index) => (
                                         <tr key={product.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                            <td className="p-4 text-center align-middle">{(products.current_page - 1) * 10 + index + 1}</td>
                                             <td className="p-4 align-middle whitespace-nowrap">{product.product_code}</td>
                                             <td className="p-4 align-middle whitespace-nowrap font-medium">{product.product_name}</td>
                                             <td className="p-4 align-middle whitespace-nowrap">{product.category?.category_name || '-'}</td>
@@ -103,7 +105,7 @@ export default function ProductsIndex({ products, categories, units }: ProductsI
                                     ))}
                                     {products.data.length === 0 && (
                                         <tr>
-                                            <td colSpan={7} className="h-24 text-center text-muted-foreground">
+                                            <td colSpan={10} className="h-24 text-center text-muted-foreground">
                                                 Belum ada data produk.
                                             </td>
                                         </tr>

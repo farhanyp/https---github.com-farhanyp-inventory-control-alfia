@@ -41,8 +41,14 @@ class UnitController extends Controller
 
     public function destroy(Unit $unit)
     {
-        $unit->delete();
-
-        return redirect()->back()->with('success', 'Unit deleted successfully.');
+        try {
+            $unit->delete();
+            return redirect()->back()->with('success', 'Satuan berhasil dihapus.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '23000') {
+                return back()->withErrors(['message' => 'Satuan ini tidak dapat dihapus karena masih digunakan oleh data produk.']);
+            }
+            return back()->withErrors(['message' => 'Terjadi kesalahan saat menghapus data.']);
+        }
     }
 }

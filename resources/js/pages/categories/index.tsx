@@ -52,17 +52,17 @@ export default function CategoriesIndex({ categories }: CategoriesIndexProps) {
                             <table className="w-full caption-bottom text-sm">
                                 <thead className="[&_tr]:border-b bg-muted/30">
                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-24">ID</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-24">No</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Nama Kategori</th>
                                         <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-48">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody className="[&_tr:last-child]:border-0 bg-card">
-                                    {categories.data.map((category) => (
+                                    {categories.data.map((category, index) => (
                                         <tr key={category.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                             <td className="p-4 align-middle">
                                                 <span className="inline-flex items-center rounded-md bg-muted/60 px-2 py-1 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border/40">
-                                                    {category.id}
+                                                    {(categories.current_page - 1) * 10 + index + 1}
                                                 </span>
                                             </td>
                                             <td className="p-4 align-middle font-medium">{category.category_name}</td>
@@ -84,11 +84,11 @@ export default function CategoriesIndex({ categories }: CategoriesIndexProps) {
 
                         {/* Tampilan Mobile (Card) */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:hidden gap-4">
-                            {categories.data.map((category) => (
+                            {categories.data.map((category, index) => (
                                 <div key={category.id} className="group relative flex flex-col justify-between p-5 rounded-xl border border-border/60 bg-card shadow-sm hover:shadow-md transition-all hover:border-primary/30 gap-4">
                                     <div className="flex items-start justify-between">
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-xs font-medium text-muted-foreground bg-muted/60 px-2 py-0.5 rounded border border-border/40 w-fit">ID: {category.id}</span>
+                                            <span className="text-xs font-medium text-muted-foreground bg-muted/60 px-2 py-0.5 rounded border border-border/40 w-fit">No: {(categories.current_page - 1) * 10 + index + 1}</span>
                                             <h4 className="font-semibold text-lg text-foreground mt-1 group-hover:text-primary transition-colors line-clamp-2">{category.category_name}</h4>
                                         </div>
                                     </div>

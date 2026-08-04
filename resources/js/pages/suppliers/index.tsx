@@ -55,6 +55,7 @@ export default function SuppliersIndex({ suppliers }: SuppliersIndexProps) {
                             <table className="w-full caption-bottom text-sm">
                                 <thead className="[&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                        <th className="h-12 w-16 px-4 text-center align-middle font-medium text-muted-foreground">No</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Kode</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Nama Supplier</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">No. Telepon</th>
@@ -63,8 +64,9 @@ export default function SuppliersIndex({ suppliers }: SuppliersIndexProps) {
                                     </tr>
                                 </thead>
                                 <tbody className="[&_tr:last-child]:border-0">
-                                    {suppliers.data.map((supplier) => (
+                                    {suppliers.data.map((supplier, index) => (
                                         <tr key={supplier.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                                            <td className="p-4 text-center align-middle">{(suppliers.current_page - 1) * 10 + index + 1}</td>
                                             <td className="p-4 align-middle">{supplier.supplier_code}</td>
                                             <td className="p-4 align-middle">{supplier.supplier_name}</td>
                                             <td className="p-4 align-middle">{supplier.phone_number || '-'}</td>
@@ -83,7 +85,7 @@ export default function SuppliersIndex({ suppliers }: SuppliersIndexProps) {
                                     ))}
                                     {suppliers.data.length === 0 && (
                                         <tr>
-                                            <td colSpan={5} className="h-24 text-center text-muted-foreground">
+                                            <td colSpan={6} className="h-24 text-center text-muted-foreground">
                                                 Belum ada data supplier.
                                             </td>
                                         </tr>

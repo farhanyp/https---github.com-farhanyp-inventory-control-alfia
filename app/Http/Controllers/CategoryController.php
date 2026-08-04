@@ -41,8 +41,14 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        $category->delete();
-
-        return redirect()->back()->with('success', 'Category deleted successfully.');
+        try {
+            $category->delete();
+            return redirect()->back()->with('success', 'Kategori berhasil dihapus.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == '23000') {
+                return back()->withErrors(['message' => 'Kategori ini tidak dapat dihapus karena masih digunakan oleh data produk.']);
+            }
+            return back()->withErrors(['message' => 'Terjadi kesalahan saat menghapus data.']);
+        }
     }
 }
