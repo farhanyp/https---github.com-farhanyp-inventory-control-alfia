@@ -41,21 +41,23 @@ export function EditDialog({ open, onOpenChange, product, categories, units, onS
     });
 
     useEffect(() => {
-        if (product) {
-            setData({
-                product_name: product.product_name || '',
-                category_id: product.category_id ? product.category_id.toString() : '',
-                unit_id: product.unit_id ? product.unit_id.toString() : '',
-                purchase_price: product.purchase_price ? product.purchase_price.toString() : '',
-                selling_price: product.selling_price ? product.selling_price.toString() : '',
-                min_stock: product.min_stock ? product.min_stock.toString() : '',
-                status: product.status || 'active',
-            });
-        } else {
-            reset();
+        if (open) {
+            if (product) {
+                setData({
+                    product_name: product.product_name || '',
+                    category_id: product.category_id ? product.category_id.toString() : '',
+                    unit_id: product.unit_id ? product.unit_id.toString() : '',
+                    purchase_price: product.purchase_price != null ? parseInt(String(product.purchase_price), 10).toString() : '',
+                    selling_price: product.selling_price != null ? parseInt(String(product.selling_price), 10).toString() : '',
+                    min_stock: product.min_stock != null ? parseInt(String(product.min_stock), 10).toString() : '',
+                    status: product.status || 'active',
+                });
+            } else {
+                reset();
+            }
+            clearErrors();
         }
-        clearErrors();
-    }, [product]);
+    }, [product, open]);
 
     const handleEdit = (e: React.FormEvent) => {
         e.preventDefault();
