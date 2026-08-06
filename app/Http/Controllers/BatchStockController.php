@@ -11,16 +11,20 @@ class BatchStockController extends Controller
 {
     public function index()
     {
-        // 1. Dapatkan 10 produk yang memiliki stok tersisa dengan query whereHas ke Product (sehingga total() akurat)
+        // 1. Dapatkan 10 produk yang memiliki stok tersisa dan kadaluwarsa dalam <= 30 hari
         $paginatedProducts = Product::whereHas('batchStocks', function($query) {
-            $query->where('remaining_quantity', '>', 0);
+            $query->where('remaining_quantity', '>', 0)
+                  ->whereNotNull('expired_date')
+                  ->where('expired_date', '<=', now()->addDays(30));
         })->paginate(10);
 
-        // 2. Ambil semua batch dari 10 produk tersebut
+        // 2. Ambil semua batch dari 10 produk tersebut yang juga kadaluwarsa dalam <= 30 hari
         $batchStocksData = BatchStock::with(['product', 'incomingProduct.supplier'])
             ->where('remaining_quantity', '>', 0)
+            ->whereNotNull('expired_date')
+            ->where('expired_date', '<=', now()->addDays(30))
             ->whereIn('product_id', $paginatedProducts->pluck('id'))
-            ->orderByRaw('expired_date IS NULL ASC, expired_date ASC, remaining_quantity ASC')
+            ->orderByRaw('expired_date ASC, remaining_quantity ASC')
             ->get();
 
         // 3. Buat paginator manual menggunakan data Total & Current Page yang akurat dari Product

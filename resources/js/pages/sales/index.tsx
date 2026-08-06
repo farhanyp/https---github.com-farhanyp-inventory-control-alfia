@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import type { Sales } from '@/types/sales';
 import type { Product } from '@/types/product';
+import type { Reseller } from '@/types/reseller';
 import { ShoppingCart, Plus, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CreateDialog } from './create-dialog';
@@ -15,9 +16,10 @@ interface SalesIndexProps {
         links: { url: string | null; label: string; active: boolean }[];
     };
     products: (Product & { total_stock: string | number })[];
+    resellers: Reseller[];
 }
 
-export default function SalesIndex({ sales, products }: SalesIndexProps) {
+export default function SalesIndex({ sales, products, resellers }: SalesIndexProps) {
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const formatCurrency = (value: string | number) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(parseFloat(value as string));
@@ -52,7 +54,7 @@ export default function SalesIndex({ sales, products }: SalesIndexProps) {
                                 <tr className="border-b">
                                     <th className="h-12 px-4 text-left font-medium text-muted-foreground">No. Transaksi</th>
                                     <th className="h-12 px-4 text-left font-medium text-muted-foreground">Tanggal</th>
-                                    <th className="h-12 px-4 text-left font-medium text-muted-foreground">Pelanggan</th>
+                                    <th className="h-12 px-4 text-left font-medium text-muted-foreground">Pelanggan (Reseller)</th>
                                     <th className="h-12 px-4 text-left font-medium text-muted-foreground">Metode Bayar</th>
                                     <th className="h-12 px-4 text-right font-medium text-muted-foreground">Total Belanja</th>
                                     <th className="h-12 px-4 text-center font-medium text-muted-foreground">Aksi</th>
@@ -63,7 +65,7 @@ export default function SalesIndex({ sales, products }: SalesIndexProps) {
                                     <tr key={item.id} className="border-b transition-colors hover:bg-muted/50 last:border-0">
                                         <td className="p-4 font-medium">{item.transaction_number}</td>
                                         <td className="p-4">{new Date(item.transaction_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                                        <td className="p-4">{item.customer_name || '-'}</td>
+                                        <td className="p-4">{item.reseller?.name || '-'}</td>
                                         <td className="p-4">
                                             <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${item.payment_method === 'Cash' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
                                                 {item.payment_method}
@@ -100,7 +102,8 @@ export default function SalesIndex({ sales, products }: SalesIndexProps) {
             <CreateDialog 
                 open={isCreateOpen} 
                 onOpenChange={setIsCreateOpen} 
-                products={products} 
+                products={products}
+                resellers={resellers}
             />
         </>
     );

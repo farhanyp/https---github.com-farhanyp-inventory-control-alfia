@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
 import type { Product } from '@/types/product';
+import type { Reseller } from '@/types/reseller';
 import { ShoppingBag, Plus, Trash2, Calculator, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,9 +12,10 @@ interface CreateDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     products: (Product & { total_stock: string | number })[];
+    resellers: Reseller[];
 }
 
-export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps) {
+export function CreateDialog({ open, onOpenChange, products, resellers }: CreateDialogProps) {
     const todayDate = new Date().toISOString().split('T')[0];
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -175,13 +177,20 @@ export function CreateDialog({ open, onOpenChange, products }: CreateDialogProps
                                 {errors.transaction_date && <p className="text-sm text-destructive">{errors.transaction_date}</p>}
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="customer_name">Nama Pelanggan (Opsional)</Label>
+                                <Label htmlFor="customer_name">Nama Pelanggan (Reseller) (Opsional)</Label>
                                 <Input
                                     id="customer_name"
-                                    placeholder="Umum"
+                                    list="resellers-list"
+                                    placeholder="Cari atau Ketik Baru..."
                                     value={data.customer_name}
                                     onChange={(e) => setData('customer_name', e.target.value)}
+                                    autoComplete="off"
                                 />
+                                <datalist id="resellers-list">
+                                    {resellers && resellers.map((reseller) => (
+                                        <option key={reseller.id} value={reseller.name} />
+                                    ))}
+                                </datalist>
                                 {errors.customer_name && <p className="text-sm text-destructive">{errors.customer_name}</p>}
                             </div>
                         </div>

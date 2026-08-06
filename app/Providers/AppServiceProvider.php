@@ -31,7 +31,6 @@ class AppServiceProvider extends ServiceProvider
             try {
                 return BatchStock::where('remaining_quantity', '>', 0)
                     ->whereNotNull('expired_date')
-                    ->where('expired_date', '>=', now()->subDays(30))
                     ->where('expired_date', '<=', now()->addDays(30))
                     ->count();
             } catch (\Exception $e) {

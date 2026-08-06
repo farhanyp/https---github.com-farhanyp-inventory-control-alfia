@@ -77,14 +77,25 @@ class TransactionSeeder extends Seeder
             ]);
         }
 
+        // 1.5 Resellers
+        $resellerIds = [];
+        for ($i = 0; $i < 5; $i++) {
+            $resellerIds[] = DB::table('reseller')->insertGetId([
+                'name' => $faker->company,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }
+
         // 2. Sales & Sales Details
         for ($i = 1; $i <= 30; $i++) {
             $saleDate = Carbon::now()->subDays($faker->numberBetween(0, 10));
+            $selectedResellerId = $faker->boolean(70) ? $faker->randomElement($resellerIds) : null;
             
             $saleId = DB::table('sales')->insertGetId([
                 'transaction_number' => 'TRX-OUT-' . strtoupper(Str::random(6)),
                 'transaction_date' => $saleDate,
-                'customer_name' => $faker->name,
+                'reseller_id' => $selectedResellerId,
                 'payment_method' => 'Cash',
                 'total' => 0, // update later
                 'paid_amount' => 0, // update later
@@ -107,6 +118,7 @@ class TransactionSeeder extends Seeder
 
                 DB::table('sales_detail')->insert([
                     'sales_id' => $saleId,
+                    'reseller_id' => $selectedResellerId,
                     'product_id' => $batch->product_id,
                     'batch_id' => $batch->id,
                     'quantity' => $qty,

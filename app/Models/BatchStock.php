@@ -36,18 +36,14 @@ class BatchStock extends Model
         $today = \Carbon\Carbon::today();
         $expired = \Carbon\Carbon::parse($this->expired_date)->startOfDay();
 
-        if ($expired->isPast() || $today->diffInDays($expired, false) <= 7) {
+        if ($expired->isPast()) {
             return 'Expired';
         }
 
         $diff = $today->diffInDays($expired, false);
 
-        if ($diff <= 14) {
-            return 'Hampir Expired';
-        }
-
         if ($diff <= 30) {
-            return 'Peringatan';
+            return 'Hampir Expired';
         }
 
         return 'Aman';

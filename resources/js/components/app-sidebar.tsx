@@ -50,6 +50,12 @@ const navGroups: NavGroup[] = [
                 roles: ['MANAGEMENT', 'ADMIN'],
             },
             {
+                title: 'Reseller',
+                href: '/resellers',
+                icon: Users,
+                roles: ['MANAGEMENT', 'ADMIN'],
+            },
+            {
                 title: 'Produk',
                 href: '/products',
                 icon: Package,
@@ -73,7 +79,7 @@ const navGroups: NavGroup[] = [
                 roles: ['MANAGEMENT', 'ADMIN'],
             },
             {
-                title: 'Kasir / Penjualan',
+                title: ' Penjualan',
                 href: '/sales',
                 icon: ShoppingCart,
                 roles: ['MANAGEMENT', 'STAFF'],

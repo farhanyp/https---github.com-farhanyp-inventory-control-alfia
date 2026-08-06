@@ -37,8 +37,6 @@ export default function BatchStocksIndex({ batchStocks }: BatchStocksIndexProps)
         switch (status) {
             case 'Aman':
                 return renderBadge(<CheckCircle2 className="w-3.5 h-3.5" />, 'Aman', 'bg-emerald-500/10 text-emerald-600 ring-emerald-500/20 dark:text-emerald-400');
-            case 'Peringatan':
-                return renderBadge(<Clock className="w-3.5 h-3.5" />, 'Peringatan', 'bg-amber-500/10 text-amber-600 ring-amber-500/20 dark:text-amber-400');
             case 'Hampir Expired':
                 return renderBadge(<AlertTriangle className="w-3.5 h-3.5" />, 'Hampir Kedaluwarsa', 'bg-orange-500/10 text-orange-600 ring-orange-500/20 dark:text-orange-400');
             case 'Expired':
@@ -85,9 +83,8 @@ export default function BatchStocksIndex({ batchStocks }: BatchStocksIndexProps)
                                 <div className="p-2">
                                     <ul className="space-y-3">
                                         <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-emerald-500" /> <span className="text-emerald-500 font-medium">Aman:</span> &gt; 30 Hari</li>
-                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-amber-500" /> <span className="text-amber-500 font-medium">Peringatan:</span> 15 - 30 Hari</li>
-                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-orange-500" /> <span className="text-orange-500 font-medium">Hampir Kedaluwarsa:</span> 8 - 14 Hari</li>
-                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-rose-500" /> <span className="text-rose-500 font-medium">Kedaluwarsa:</span> &lt; 7 Hari / Terlewat</li>
+                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-orange-500" /> <span className="text-orange-500 font-medium">Hampir Kedaluwarsa:</span> 0 - 30 Hari</li>
+                                        <li className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-rose-500" /> <span className="text-rose-500 font-medium">Kedaluwarsa:</span> Terlewat</li>
                                     </ul>
                                 </div>
                             </DialogContent>

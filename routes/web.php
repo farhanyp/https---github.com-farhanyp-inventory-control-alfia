@@ -17,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('categories', \App\Http\Controllers\CategoryController::class)->except(['create', 'show', 'edit']);
         Route::resource('units', \App\Http\Controllers\UnitController::class)->except(['create', 'show', 'edit']);
         Route::resource('suppliers', \App\Http\Controllers\SupplierController::class)->except(['create', 'show', 'edit']);
+        Route::resource('resellers', \App\Http\Controllers\ResellerController::class)->except(['create', 'show', 'edit']);
         Route::resource('products', \App\Http\Controllers\ProductController::class)->except(['create', 'show', 'edit']);
         Route::resource('incoming-products', \App\Http\Controllers\IncomingProductController::class)->except(['create', 'show', 'edit']);
         Route::resource('batch-stocks', \App\Http\Controllers\BatchStockController::class)->only(['index']);

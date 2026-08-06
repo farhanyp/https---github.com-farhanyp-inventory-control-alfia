@@ -56,8 +56,8 @@ export default function SalesShow({ sale }: SalesShowProps) {
                             <p className="text-muted-foreground">{formatDate(sale.transaction_date)}</p>
                         </div>
                         <div className="md:text-right">
-                            <p className="text-sm text-muted-foreground mb-1">Pelanggan</p>
-                            <p className="font-medium text-lg">{sale.customer_name || 'Umum (Tanpa Nama)'}</p>
+                            <p className="text-sm text-muted-foreground mb-1">Pelanggan (Reseller)</p>
+                            <p className="font-medium text-lg">{sale.reseller?.name || 'Umum (Tanpa Nama)'}</p>
                             <p className="text-sm text-muted-foreground mt-4 mb-1">Kasir / Petugas</p>
                             <p className="font-medium">{sale.creator?.name || 'Sistem'}</p>
                         </div>

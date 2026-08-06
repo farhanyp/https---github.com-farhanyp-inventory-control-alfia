@@ -24,7 +24,7 @@
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td class="text-center">{{ $item->transaction_date->format('d/m/Y') }}</td>
                     <td class="text-center">{{ $item->transaction_number }}</td>
-                    <td>{{ $item->customer_name ?: 'Umum' }}</td>
+                    <td>{{ $item->reseller?->name ?: 'Umum' }}</td>
                     <td class="text-center">{{ $item->payment_method->value }}</td>
                     <td>{{ $item->creator->name ?? '-' }}</td>
                     <td class="text-right">{{ number_format($item->total, 0, ',', '.') }}</td>

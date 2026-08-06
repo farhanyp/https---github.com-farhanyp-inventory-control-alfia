@@ -16,6 +16,7 @@ class SalesDetail extends Model
 
     protected $fillable = [
         'sales_id',
+        'reseller_id',
         'product_id',
         'batch_id',
         'quantity',
@@ -24,6 +25,11 @@ class SalesDetail extends Model
         'expired_date',
         'batch_no',
     ];
+
+    public function reseller()
+    {
+        return $this->belongsTo(Reseller::class, 'reseller_id');
+    }
 
     protected function casts(): array
     {

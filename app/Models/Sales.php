@@ -19,7 +19,7 @@ class Sales extends Model
     protected $fillable = [
         'transaction_number',
         'transaction_date',
-        'customer_name',
+        'reseller_id',
         'payment_method',
         'total',
         'paid_amount',
@@ -27,6 +27,11 @@ class Sales extends Model
         'description',
         'created_by',
     ];
+
+    public function reseller()
+    {
+        return $this->belongsTo(Reseller::class, 'reseller_id');
+    }
 
     protected function casts(): array
     {

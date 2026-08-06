@@ -44,23 +44,25 @@ export function EditDialog({ open, onOpenChange, incomingProduct, suppliers, pro
     });
 
     useEffect(() => {
-        if (incomingProduct) {
-            setData({
-                incoming_date: incomingProduct.incoming_date ? incomingProduct.incoming_date.split('T')[0] : '', // Keep YYYY-MM-DD
-                invoice_number: incomingProduct.invoice_number || '',
-                supplier_id: incomingProduct.supplier_id ? incomingProduct.supplier_id.toString() : '',
-                product_id: incomingProduct.product_id ? incomingProduct.product_id.toString() : '',
-                batch_no: incomingProduct.batch_no || '',
-                expired_date: incomingProduct.expired_date ? incomingProduct.expired_date.split('T')[0] : '',
-                quantity: incomingProduct.quantity ? incomingProduct.quantity.toString() : '',
-                purchase_price: incomingProduct.purchase_price ? incomingProduct.purchase_price.toString() : '',
-                description: incomingProduct.description || '',
-            });
-        } else {
-            reset();
+        if (open) {
+            if (incomingProduct) {
+                setData({
+                    incoming_date: incomingProduct.incoming_date ? incomingProduct.incoming_date.split('T')[0] : '', // Keep YYYY-MM-DD
+                    invoice_number: incomingProduct.invoice_number || '',
+                    supplier_id: incomingProduct.supplier_id ? incomingProduct.supplier_id.toString() : '',
+                    product_id: incomingProduct.product_id ? incomingProduct.product_id.toString() : '',
+                    batch_no: incomingProduct.batch_no || '',
+                    expired_date: incomingProduct.expired_date ? incomingProduct.expired_date.split('T')[0] : '',
+                    quantity: incomingProduct.quantity != null ? parseInt(String(incomingProduct.quantity), 10).toString() : '',
+                    purchase_price: incomingProduct.purchase_price != null ? parseInt(String(incomingProduct.purchase_price), 10).toString() : '',
+                    description: incomingProduct.description || '',
+                });
+            } else {
+                reset();
+            }
+            clearErrors();
         }
-        clearErrors();
-    }, [incomingProduct]);
+    }, [incomingProduct, open]);
 
     const handleEdit = (e: React.FormEvent) => {
         e.preventDefault();

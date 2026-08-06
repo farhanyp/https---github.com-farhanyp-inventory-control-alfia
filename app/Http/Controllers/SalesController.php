@@ -15,7 +15,7 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $sales = Sales::with('creator')->latest('created_at')->paginate(10);
+        $sales = Sales::with(['creator', 'reseller'])->latest('created_at')->paginate(10);
         
         // Get active products that have remaining stock > 0 for Cashier modal
         $products = Product::where('status', 'active')
@@ -25,9 +25,12 @@ class SalesController extends Controller
             ->havingRaw('COALESCE(total_stock, 0) > 0')
             ->get();
 
+        $resellers = \App\Models\Reseller::orderBy('name', 'asc')->get();
+
         return Inertia::render('sales/index', [
             'sales' => $sales,
             'products' => $products,
+            'resellers' => $resellers,
         ]);
     }
 
@@ -66,13 +69,21 @@ class SalesController extends Controller
                 throw new \Exception("Jumlah uang bayar (Rp " . number_format($validated['paid_amount'], 0, ',', '.') . ") kurang dari total belanja (Rp " . number_format($overallTotal, 0, ',', '.') . ").");
             }
 
+            // Handle Reseller (Find or Create)
+            $reseller = null;
+            if (!empty($validated['customer_name'])) {
+                $reseller = \App\Models\Reseller::firstOrCreate([
+                    'name' => $validated['customer_name']
+                ]);
+            }
+
             $changeAmount = $validated['paid_amount'] - $overallTotal;
 
             // 2. Create Sales Record
             $sales = Sales::create([
                 'transaction_number' => $transactionNumber,
                 'transaction_date' => $validated['transaction_date'],
-                'customer_name' => $validated['customer_name'] ?? null,
+                'reseller_id' => $reseller ? $reseller->id : null,
                 'payment_method' => $validated['payment_method'],
                 'total' => $overallTotal,
                 'paid_amount' => $validated['paid_amount'],
@@ -106,6 +117,7 @@ class SalesController extends Controller
                     // Create Sales Detail (record exactly from which batch we took)
                     SalesDetail::create([
                         'sales_id' => $sales->id,
+                        'reseller_id' => $reseller ? $reseller->id : null,
                         'product_id' => $product->id,
                         'batch_id' => $batch->id,
                         'batch_no' => $batch->batch_no,
