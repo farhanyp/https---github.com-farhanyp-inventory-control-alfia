@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('reseller', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 120);
+            $table->string('reseller_code', 30)->unique();
+            $table->string('reseller_name', 120);
+            $table->string('phone_number', 30)->nullable();
+            $table->text('address')->nullable();
             $table->dateTime('created_at')->nullable();
-            $table->dateTime('updated_at')->nullable();
         });
     }
 

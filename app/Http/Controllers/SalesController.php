@@ -25,7 +25,7 @@ class SalesController extends Controller
             ->havingRaw('COALESCE(total_stock, 0) > 0')
             ->get();
 
-        $resellers = \App\Models\Reseller::orderBy('name', 'asc')->get();
+        $resellers = \App\Models\Reseller::orderBy('reseller_name', 'asc')->get();
 
         return Inertia::render('sales/index', [
             'sales' => $sales,
@@ -72,9 +72,22 @@ class SalesController extends Controller
             // Handle Reseller (Find or Create)
             $reseller = null;
             if (!empty($validated['customer_name'])) {
-                $reseller = \App\Models\Reseller::firstOrCreate([
-                    'name' => $validated['customer_name']
-                ]);
+                $reseller = \App\Models\Reseller::where('reseller_name', $validated['customer_name'])->first();
+                if (!$reseller) {
+                    $lastReseller = \App\Models\Reseller::orderBy('id', 'desc')->first();
+                    $nextId = 1;
+                    if ($lastReseller && preg_match('/RSL-(\d+)/', $lastReseller->reseller_code, $matches)) {
+                        $nextId = intval($matches[1]) + 1;
+                    } elseif ($lastReseller) {
+                        $nextId = $lastReseller->id + 1;
+                    }
+                    $resellerCode = 'RSL-' . str_pad($nextId, 3, '0', STR_PAD_LEFT);
+
+                    $reseller = \App\Models\Reseller::create([
+                        'reseller_code' => $resellerCode,
+                        'reseller_name' => $validated['customer_name']
+                    ]);
+                }
             }
 
             $changeAmount = $validated['paid_amount'] - $overallTotal;

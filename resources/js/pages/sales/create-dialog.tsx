@@ -188,7 +188,7 @@ export function CreateDialog({ open, onOpenChange, products, resellers }: Create
                                 />
                                 <datalist id="resellers-list">
                                     {resellers && resellers.map((reseller) => (
-                                        <option key={reseller.id} value={reseller.name} />
+                                        <option key={reseller.id} value={reseller.reseller_name} />
                                     ))}
                                 </datalist>
                                 {errors.customer_name && <p className="text-sm text-destructive">{errors.customer_name}</p>}

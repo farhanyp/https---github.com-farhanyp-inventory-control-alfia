@@ -81,9 +81,11 @@ class TransactionSeeder extends Seeder
         $resellerIds = [];
         for ($i = 0; $i < 5; $i++) {
             $resellerIds[] = DB::table('reseller')->insertGetId([
-                'name' => $faker->company,
+                'reseller_code' => 'RSL-' . str_pad($i + 1, 3, '0', STR_PAD_LEFT),
+                'reseller_name' => $faker->company,
+                'phone_number' => $faker->phoneNumber,
+                'address' => $faker->address,
                 'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ]);
         }
 

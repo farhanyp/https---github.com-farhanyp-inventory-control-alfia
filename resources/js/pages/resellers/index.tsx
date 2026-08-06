@@ -56,7 +56,9 @@ export default function ResellersIndex({ resellers }: ResellersIndexProps) {
                                 <thead className="[&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                         <th className="h-12 w-16 px-4 text-center align-middle font-medium text-muted-foreground">No</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Kode Reseller</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Nama Reseller</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">No. Telepon</th>
                                         <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Aksi</th>
                                     </tr>
                                 </thead>
@@ -64,7 +66,9 @@ export default function ResellersIndex({ resellers }: ResellersIndexProps) {
                                     {resellers.data.map((reseller, index) => (
                                         <tr key={reseller.id} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                             <td className="p-4 text-center align-middle">{(resellers.current_page - 1) * 10 + index + 1}</td>
-                                            <td className="p-4 align-middle">{reseller.name}</td>
+                                            <td className="p-4 align-middle font-mono text-sm">{reseller.reseller_code}</td>
+                                            <td className="p-4 align-middle">{reseller.reseller_name}</td>
+                                            <td className="p-4 align-middle">{reseller.phone_number || '-'}</td>
                                             <td className="p-4 align-middle text-right">
                                                 <div className="flex justify-end gap-2">
                                                     <Button variant="outline" size="icon" onClick={() => handleOpenEdit(reseller)}>
@@ -79,7 +83,7 @@ export default function ResellersIndex({ resellers }: ResellersIndexProps) {
                                     ))}
                                     {resellers.data.length === 0 && (
                                         <tr>
-                                            <td colSpan={3} className="h-24 text-center text-muted-foreground">
+                                            <td colSpan={5} className="h-24 text-center text-muted-foreground">
                                                 Belum ada data reseller.
                                             </td>
                                         </tr>

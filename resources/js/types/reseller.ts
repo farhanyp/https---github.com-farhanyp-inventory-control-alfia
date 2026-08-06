@@ -1,6 +1,8 @@
 export interface Reseller {
     id: number;
-    name: string;
+    reseller_code: string;
+    reseller_name: string;
+    phone_number: string | null;
+    address: string | null;
     created_at: string;
-    updated_at: string;
 }

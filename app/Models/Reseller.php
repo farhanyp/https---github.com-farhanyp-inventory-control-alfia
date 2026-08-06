@@ -11,7 +11,9 @@ class Reseller extends Model
 
     protected $table = 'reseller';
 
-    protected $fillable = ['name'];
+    const UPDATED_AT = null;
+
+    protected $fillable = ['reseller_code', 'reseller_name', 'phone_number', 'address'];
 
     public function sales()
     {
