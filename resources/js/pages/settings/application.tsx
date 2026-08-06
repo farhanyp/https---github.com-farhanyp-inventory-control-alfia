@@ -31,7 +31,7 @@ export default function ApplicationSettingsPage({ settings }: Props) {
         const file = e.target.files?.[0];
         if (file) {
             setData('logo', file);
-            
+
             // Preview image
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -43,7 +43,7 @@ export default function ApplicationSettingsPage({ settings }: Props) {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // We use POST instead of PATCH because we're uploading files
         post('/settings/application', {
             preserveScroll: true,
@@ -56,13 +56,13 @@ export default function ApplicationSettingsPage({ settings }: Props) {
     };
 
     return (
-        <SettingsLayout>
+        <>
             <Head title="Pengaturan Aplikasi" />
 
             <div className="space-y-6">
-                <Heading 
-                    title="Aplikasi" 
-                    description="Kelola informasi utama aplikasi seperti nama, logo, alamat, dan kontak." 
+                <Heading
+                    title="Aplikasi"
+                    description="Kelola informasi utama aplikasi seperti nama, logo, alamat, dan kontak."
                     variant="small"
                 />
 
@@ -84,15 +84,15 @@ export default function ApplicationSettingsPage({ settings }: Props) {
 
                     <div className="space-y-2">
                         <Label htmlFor="logo">Logo Aplikasi</Label>
-                        
+
                         <div className="flex items-start gap-6">
                             <div className="flex-shrink-0">
                                 {previewLogo ? (
                                     <div className="w-24 h-24 rounded-lg border overflow-hidden bg-muted flex items-center justify-center">
-                                        <img 
-                                            src={previewLogo} 
-                                            alt="Logo Preview" 
-                                            className="w-full h-full object-contain" 
+                                        <img
+                                            src={previewLogo}
+                                            alt="Logo Preview"
+                                            className="w-full h-full object-contain"
                                         />
                                     </div>
                                 ) : (
@@ -168,7 +168,7 @@ export default function ApplicationSettingsPage({ settings }: Props) {
                             {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Simpan Pengaturan
                         </Button>
-                        
+
                         {recentlySuccessful && (
                             <p className="text-sm font-medium text-green-600 dark:text-green-400">
                                 Berhasil disimpan.
@@ -177,6 +177,6 @@ export default function ApplicationSettingsPage({ settings }: Props) {
                     </div>
                 </form>
             </div>
-        </SettingsLayout>
+        </>
     );
 }

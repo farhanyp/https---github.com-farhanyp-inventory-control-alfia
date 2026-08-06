@@ -35,25 +35,25 @@ const navGroups: NavGroup[] = [
                 title: 'Kategori',
                 href: '/categories',
                 icon: Tags,
-                roles: ['MANAGEMENT', 'ADMIN'],
+                roles: ['ADMIN'],
             },
             {
                 title: 'Satuan',
                 href: '/units',
                 icon: Scale,
-                roles: ['MANAGEMENT', 'ADMIN'],
+                roles: ['ADMIN'],
             },
             {
                 title: 'Supplier',
                 href: '/suppliers',
                 icon: Truck,
-                roles: ['MANAGEMENT', 'ADMIN'],
+                roles: ['ADMIN'],
             },
             {
                 title: 'Reseller',
                 href: '/resellers',
                 icon: Users,
-                roles: ['MANAGEMENT', 'ADMIN'],
+                roles: ['ADMIN'],
             },
             {
                 title: 'Produk',
@@ -79,7 +79,7 @@ const navGroups: NavGroup[] = [
                 roles: ['MANAGEMENT', 'ADMIN'],
             },
             {
-                title: ' Penjualan',
+                title: 'Penjualan',
                 href: '/sales',
                 icon: ShoppingCart,
                 roles: ['MANAGEMENT', 'STAFF'],
@@ -99,7 +99,7 @@ const navGroups: NavGroup[] = [
                 title: 'Laporan',
                 href: '/reports',
                 icon: FileText,
-                roles: ['MANAGEMENT', 'ADMIN', 'STAFF'],
+                roles: ['MANAGEMENT'],
             }
         ]
     }

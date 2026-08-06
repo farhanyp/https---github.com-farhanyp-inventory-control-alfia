@@ -25,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::inertia('settings/appearance', 'settings/appearance')->name('appearance.edit');
 
-    Route::middleware(['role:MANAGEMENT|ADMIN'])->group(function () {
+    Route::middleware(['role:MANAGEMENT'])->group(function () {
         Route::get('settings/application', [\App\Http\Controllers\Settings\ApplicationController::class, 'edit'])->name('application.edit');
         Route::post('settings/application', [\App\Http\Controllers\Settings\ApplicationController::class, 'update'])->name('application.update');
     });

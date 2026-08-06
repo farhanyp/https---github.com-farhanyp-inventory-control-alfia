@@ -177,7 +177,7 @@ export function CreateDialog({ open, onOpenChange, products, resellers }: Create
                                 {errors.transaction_date && <p className="text-sm text-destructive">{errors.transaction_date}</p>}
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="customer_name">Nama Pelanggan (Reseller) (Opsional)</Label>
+                                <Label htmlFor="customer_name">Reseller (Opsional)</Label>
                                 <Input
                                     id="customer_name"
                                     list="resellers-list"

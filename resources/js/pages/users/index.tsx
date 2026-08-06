@@ -44,7 +44,7 @@ export default function UsersIndex({ users, roles }: UsersIndexProps) {
                                                 <td className="p-4 align-middle">{user.email}</td>
                                                 <td className="p-4 align-middle">
                                                     <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10 dark:bg-indigo-400/10 dark:text-indigo-400 dark:ring-indigo-400/30">
-                                                        {currentRole || 'GUEST'}
+                                                        {currentRole ? (currentRole.toUpperCase() === 'MANAGEMENT' ? 'PIMPINAN' : currentRole) : 'GUEST'}
                                                     </span>
                                                 </td>
                                                 <td className="p-4 align-middle">
@@ -54,11 +54,15 @@ export default function UsersIndex({ users, roles }: UsersIndexProps) {
                                                         onChange={(e) => handleRoleChange(user.id, e.target.value)}
                                                     >
                                                         <option value="" disabled>Pilih Role</option>
-                                                        {roles.map((role: any) => (
-                                                            <option key={role.value || role} value={role.value || role}>
-                                                                {role.name || role}
-                                                            </option>
-                                                        ))}
+                                                        {roles.map((role: any) => {
+                                                            const roleName = role.name || role;
+                                                            const displayRole = roleName.toUpperCase() === 'MANAGEMENT' ? 'PIMPINAN' : roleName;
+                                                            return (
+                                                                <option key={role.value || role} value={role.value || role}>
+                                                                    {displayRole}
+                                                                </option>
+                                                            );
+                                                        })}
                                                     </select>
                                                 </td>
                                                 <td className="p-4 align-middle">
